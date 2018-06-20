@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using LogMagic.Configuration;
 
 namespace LogMagic
 {
    /// <summary>
    /// Entry point to logging configuration
    /// </summary>
-   public interface ILogConfiguration
+   public interface ILogConfiguration : ILevelConfiguration
    {
 #if !NET45
       /// <summary>

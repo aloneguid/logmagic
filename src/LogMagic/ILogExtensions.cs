@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LogMagic.Enrichers;
+using LogMagic.Levels;
 
 namespace LogMagic
 {
@@ -31,7 +32,10 @@ namespace LogMagic
       /// </summary>
       public static void Debug(this ILog log, string format, params object[] parameters)
       {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Verbose));
+         if (LogLevelChecks.Check(LogSeverity.Verbose))
+         {
+            log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Verbose));
+         }
       }
 
       /// <summary>
@@ -39,7 +43,10 @@ namespace LogMagic
       /// </summary>
       public static void Info(this ILog log, string format, params object[] parameters)
       {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Information));
+         if (LogLevelChecks.Check(LogSeverity.Information))
+         {
+            log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Information));
+         }
       }
 
       /// <summary>
@@ -47,7 +54,10 @@ namespace LogMagic
       /// </summary>
       public static void Warn(this ILog log, string format, params object[] parameters)
       {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Warning));
+         if (LogLevelChecks.Check(LogSeverity.Warning))
+         {
+            log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Warning));
+         }
       }
 
       /// <summary>
@@ -55,7 +65,10 @@ namespace LogMagic
       /// </summary>
       public static void Error(this ILog log, string format, params object[] parameters)
       {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Error));
+         if (LogLevelChecks.Check(LogSeverity.Error))
+         {
+            log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Error));
+         }
       }
 
       /// <summary>
@@ -63,7 +76,10 @@ namespace LogMagic
       /// </summary>
       public static void Critical(this ILog log, string format, params object[] parameters)
       {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Critical));
+         if (LogLevelChecks.Check(LogSeverity.Critical))
+         {
+            log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Critical));
+         }
       }
 
       private static Dictionary<string, object> Compress(params object[] properties)
