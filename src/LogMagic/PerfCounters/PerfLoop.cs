@@ -37,7 +37,7 @@ namespace LogMagic.PerfCounters
                foreach(IPerformanceCounter ipc in _configuration.PerformanceCounters)
                {
                   float value = ipc.GetValue();
-                  log.Metric(ipc.Name, value);                  
+                  log.Metric(ipc.Name, value);
                }
             }
             catch(Exception ex)

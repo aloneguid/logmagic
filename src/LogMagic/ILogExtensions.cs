@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LogMagic.Enrichers;
 
 namespace LogMagic
 {
@@ -11,13 +10,54 @@ namespace LogMagic
    public static class ILogExtensions
    {
       /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="log"></param>
+      /// <param name="message"></param>
+      /// <param name="parameters"></param>
+      public static void Write(this ILog log, string message, params object[] parameters)
+      {
+         log.Write(message, Compress(true, parameters));
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="log"></param>
+      /// <param name="message"></param>
+      /// <param name="error"></param>
+      /// <param name="parameters"></param>
+      public static void Error(this ILog log, string message, Exception error, params object[] parameters)
+      {
+         IDictionary<string, object> ps = Compress(false, parameters);
+         ps[KnownProperty.Error] = error;
+
+         log.Write(message, ps);
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="log"></param>
+      /// <param name="name"></param>
+      /// <param name="value"></param>
+      public static void Metric(this ILog log, string name, double value)
+      {
+         log.Write(null,
+            KnownProperty.MetricName, name,
+            KnownProperty.MetricValue, value);
+      }
+
+      //-------------------------- old code
+
+      /// <summary>
       /// Track dependency
       /// </summary>
       public static void Dependency(this ILog log, string type, string name, string command, long duration,
          Exception error = null,
          params object[] properties)
       {
-         log.Dependency(type, name, command, duration, error, Compress(properties));
+         log.Dependency(type, name, command, duration, error, Compress(true, properties));
       }
 
       /// <summary>
@@ -27,7 +67,7 @@ namespace LogMagic
          Exception error,
          params object[] properties)
       {
-         log.Dependency(name, name, command, duration, error, Compress(properties));
+         log.Dependency(name, name, command, duration, error, Compress(true, properties));
       }
 
       /// <summary>
@@ -60,7 +100,7 @@ namespace LogMagic
       /// </summary>
       public static void Request(this ILog log, string name, long duration, Exception error = null, params object[] properties)
       {
-         log.Request(name, duration, error, Compress(properties));
+         log.Request(name, duration, error, Compress(true, properties));
       }
 
       /// <summary>
@@ -68,52 +108,14 @@ namespace LogMagic
       /// </summary>
       public static void Event(this ILog log, string name, params object[] properties)
       {
-         log.Event(name, Compress(properties));
+         log.Event(name, Compress(true, properties));
       }
 
-      /// <summary>
-      /// Helper method to trace in <see cref="LogSeverity.Verbose"/> level
-      /// </summary>
-      public static void Debug(this ILog log, string format, params object[] parameters)
+      private static IDictionary<string, object> Compress(bool allowNullResult, params object[] properties)
       {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Verbose));
-      }
+         if ((properties == null || properties.Length == 0) && allowNullResult) return null;
 
-      /// <summary>
-      /// Helper method to trace in <see cref="LogSeverity.Information"/> level
-      /// </summary>
-      public static void Info(this ILog log, string format, params object[] parameters)
-      {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Information));
-      }
-
-      /// <summary>
-      /// Helper method to trace in <see cref="LogSeverity.Warning"/> level
-      /// </summary>
-      public static void Warn(this ILog log, string format, params object[] parameters)
-      {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Warning));
-      }
-
-      /// <summary>
-      /// Helper method to trace in <see cref="LogSeverity.Error"/> level
-      /// </summary>
-      public static void Error(this ILog log, string format, params object[] parameters)
-      {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Error));
-      }
-
-      /// <summary>
-      /// Helper method to trace in <see cref="LogSeverity.Critical"/> level
-      /// </summary>
-      public static void Critical(this ILog log, string format, params object[] parameters)
-      {
-         log.Trace(format, parameters, Compress(KnownProperty.Severity, LogSeverity.Critical));
-      }
-
-      private static Dictionary<string, object> Compress(params object[] properties)
-      {
-         var d = new Dictionary<string, object>();
+         var d = new Dictionary<string, object>(properties.Length);
 
          int maxLength = properties.Length - properties.Length % 2;
          for (int i = 0; i < maxLength; i += 2)

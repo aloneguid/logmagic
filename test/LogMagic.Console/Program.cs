@@ -35,17 +35,24 @@ namespace LogMagic.Console
                .WithSamplingInterval(TimeSpan.FromSeconds(10));
                */
 
-         L.Config.WriteTo.Trace();
+         L.Config
+            .WriteTo.Trace()
+            .WriteTo.Console()
+            .WriteTo.PoshConsole();
 
-         log.Trace("test1");
+         log.Write("test1");
 
-         log.Trace("unexpected", new InvalidOperationException());
+         log.Write("dividing...",
+            "a", 5,
+            "b", 7);
 
-         log.Trace("test", new NullReferenceException());
+         log.Error("unexpected", new InvalidOperationException());
+
+         log.Error("test", new NullReferenceException());
 
          using (L.Context("one", "two"))
          {
-            log.Trace("just a test");
+            log.Write("just a test");
          }
 
          C.ReadKey();
@@ -72,7 +79,7 @@ namespace LogMagic.Console
 
                for (int i = 0; i < maxObjects; i++)
                {
-                  log.Trace("creating object {0}", i);
+                  log.Write("creating object {0}", i);
 
                   log.Metric("Process Working Set", Environment.WorkingSet);
                }
@@ -101,7 +108,7 @@ namespace LogMagic.Console
             {
                log.Request("LogIn", RandomDurationMs(500, 600), ex);
 
-               log.Trace("checking credentials on the server...");
+               log.Write("checking credentials on the server...");
 
                using (L.Context(KnownProperty.ActivityId, webSiteActivityId))
                {
@@ -117,16 +124,16 @@ namespace LogMagic.Console
             {
                log.Request("CheckCredential", RandomDurationMs(400, 500));
 
-               log.Trace("fetching user from DB...");
+               log.Write("fetching user from DB...");
 
                log.Dependency("Databases", "MSSQL", "GetUser", RandomDurationMs(100, 200), ex);
 
                if(ex != null)
                {
-                  log.Trace("failed to fetch user", ex);
+                  log.Write("failed to fetch user", ex);
                }
 
-               log.Trace("fetching user picture");
+               log.Write("fetching user picture");
 
                log.Dependency("Blob Storage", "Primary", "GetUserPicture", RandomDurationMs(100, 200));
             }

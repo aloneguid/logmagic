@@ -12,33 +12,27 @@ namespace LogMagic
       /// Creates a rich logging event
       /// </summary>
       /// <param name="sourceName"></param>
-      /// <param name="eventType"></param>
-      /// <param name="format"></param>
-      /// <param name="parameters"></param>
+      /// <param name="message"></param>
+      /// <param name="properties"></param>
       /// <returns></returns>
       [MethodImpl(MethodImplOptions.NoInlining)]
-      public LogEvent CreateEvent(string sourceName, EventType eventType, string format, object[] parameters)
+      public LogEvent CreateEvent(string sourceName, string message, IDictionary<string, object> properties)
       {
-         var e = new LogEvent(sourceName, DateTime.UtcNow) { EventType = eventType };
+         var e = new LogEvent(sourceName, DateTime.UtcNow) { Message = message };
 
-         //add error
-         Exception error = ExtractError(parameters);
-         if (error != null) e.AddProperty(KnownProperty.Error, error);
+         if (properties != null && properties.Count > 0)
+         {
+            foreach (KeyValuePair<string, object> prop in properties)
+            {
+               e.AddProperty(prop.Key, prop.Value);
+            }
+         }
 
          //enrich
          Enrich(e, L.Config.Enrichers);
 #if NETSTANDARD || NET46
          Enrich(e, LogContext.Enrichers?.Values);
 #endif
-
-         //message
-         FormattedString fs = FormattedString.Parse(format, parameters);
-         e.Message = fs;
-         e.FormattedMessage = fs.ToString();
-         foreach(KeyValuePair<string, object> namedParam in fs.NamedParameters)
-         {
-            e.AddProperty(namedParam.Key, namedParam.Value);
-         }
 
          return e;
       }

@@ -27,7 +27,7 @@ namespace LogMagic.Test
       [Fact]
       public void Mixed_IntegerAndString_Formats()
       {
-         _log.Trace("one {0} string {1}", 1, "s");
+         _log.Write("one {0} string {1}", 1, "s");
 
          Assert.Equal("one 1 string 's'", Message);
       }
@@ -35,7 +35,7 @@ namespace LogMagic.Test
       [Fact]
       public void String_NoTransform_Formats()
       {
-         _log.Trace("the {0}", "string");
+         _log.Write("the {0}", "string");
 
          Assert.Equal("the 'string'", Message);
       }
@@ -43,7 +43,7 @@ namespace LogMagic.Test
       [Fact]
       public void SourceName_Reflected_ThisClass()
       {
-         _log.Trace("testing source");
+         _log.Write("testing source");
 
          Assert.Equal("LogMagic.Test.FormattingTest", Event.SourceName);
       }
@@ -51,7 +51,7 @@ namespace LogMagic.Test
       [Fact]
       public void Structured_NamedString_Formats()
       {
-         _log.Trace("the {Count} kettles", 5);
+         _log.Write("the {Count} kettles", 5);
 
          Assert.Equal("the 5 kettles", Message);
          Assert.Equal(5, (int)Event.GetProperty("Count"));
@@ -60,7 +60,7 @@ namespace LogMagic.Test
       [Fact]
       public void Structured_Mixed_Formats()
       {
-         _log.Trace("{0} kettles and {three:D2} lamps{2}", 5, 3, "...");
+         _log.Write("{0} kettles and {three:D2} lamps{2}", 5, 3, "...");
 
          Assert.Equal("5 kettles and 03 lamps'...'", Message);
          Assert.Equal(3, Event.GetProperty("three"));

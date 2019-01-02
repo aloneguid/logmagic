@@ -38,7 +38,7 @@ namespace LogMagic.Proxy
          {
             if(_logExceptions)
             {
-               _log.Trace("fatal error executing '{0}'", invocation.Method.Name, ex);
+               _log.Write("fatal error executing '{0}'", invocation.Method.Name, ex);
             }
 
             error = ex;

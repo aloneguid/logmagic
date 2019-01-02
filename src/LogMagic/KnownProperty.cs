@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LogMagic.Enrichers
+namespace LogMagic
 {
    /// <summary>
    /// Contains a curated list of known property names

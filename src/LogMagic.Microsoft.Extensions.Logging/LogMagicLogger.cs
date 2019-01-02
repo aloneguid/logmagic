@@ -32,7 +32,7 @@ namespace LogMagic.Microsoft.Extensions.Logging
       {
          string message = formatter(state, exception);
 
-         _log.Trace(message, new KeyValuePair<string, object>(KnownProperty.Severity, ToLogSeverity(logLevel)));
+         _log.Write(message, new KeyValuePair<string, object>(KnownProperty.Severity, ToLogSeverity(logLevel)));
       }
 
       private LogSeverity ToLogSeverity(LogLevel logLevel)

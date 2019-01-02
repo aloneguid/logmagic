@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using LogMagic.Tokenisation;
-using LogMagic.Enrichers;
 
 namespace LogMagic
 {
@@ -25,11 +23,6 @@ namespace LogMagic
       public string SourceName;
 
       /// <summary>
-      /// Type of log event, default is trace
-      /// </summary>
-      public EventType EventType;
-
-      /// <summary>
       /// Time in UTC when log event has occurred
       /// </summary>
       public DateTime EventTime;
@@ -37,12 +30,7 @@ namespace LogMagic
       /// <summary>
       /// Formatted log message
       /// </summary>
-      public string FormattedMessage;
-
-      /// <summary>
-      /// Tokenised log message
-      /// </summary>
-      public FormattedString Message;
+      public string Message;
 
       /// <summary>
       /// Extra properties
@@ -83,6 +71,16 @@ namespace LogMagic
          object r;
          if (!Properties.TryGetValue(name, out r)) return null;
          return r;
+      }
+
+      /// <summary>
+      /// Checks whether a property existss
+      /// </summary>
+      /// <param name="name"></param>
+      /// <returns></returns>
+      public bool HasProperty(string name)
+      {
+         return Properties != null && Properties.ContainsKey(name);
       }
 
       /// <summary>

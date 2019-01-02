@@ -1,10 +1,6 @@
-﻿using LogMagic.Enrichers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using NetBox.Extensions;
 using System.Linq;
 
 namespace LogMagic
@@ -27,20 +23,10 @@ namespace LogMagic
 
       [MethodImpl(MethodImplOptions.NoInlining)]
       internal void Serve(
-         EventType eventType,
-         Dictionary<string, object> properties,
-         string format,
-         params object[] parameters)
+         string message,
+         IDictionary<string, object> properties)
       {
-         LogEvent e = _factory.CreateEvent(_name, eventType, format, parameters);
-
-         if(properties != null && properties.Count > 0)
-         {
-            foreach(KeyValuePair<string, object> prop in properties)
-            {
-               e.AddProperty(prop.Key, prop.Value);
-            }
-         }
+         LogEvent e = _factory.CreateEvent(_name, message, properties);
 
          SubmitNow(e);
       }
@@ -68,18 +54,12 @@ namespace LogMagic
       }
 
       [MethodImpl(MethodImplOptions.NoInlining)]
-      public void Trace(string format, params object[] parameters)
+      public void Write(string message, IDictionary<string, object> properties)
       {
-         Serve(EventType.Trace, null, format, parameters);
+         Serve(message, properties);
       }
 
-      [MethodImpl(MethodImplOptions.NoInlining)]
-      public void Trace(string format, object[] parameters, Dictionary<string, object> properties)
-      {
-         Serve(EventType.Trace, properties, format, parameters);
-      }
-
-      [MethodImpl(MethodImplOptions.NoInlining)]
+      /*[MethodImpl(MethodImplOptions.NoInlining)]
       public void Dependency(string type, string name, string command, long duration, Exception error, Dictionary<string, object> properties)
       {
          if (properties == null) properties = new Dictionary<string, object>();
@@ -136,6 +116,7 @@ namespace LogMagic
             "metric {0} == {1}",
             name, value);
       }
+      */
 
       public override string ToString()
       {

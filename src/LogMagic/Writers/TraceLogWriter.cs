@@ -31,7 +31,7 @@ namespace LogMagic.Writers
       {
          foreach(LogEvent e in events)
          {
-            string line = TextFormatter.Format(e, _format, true);
+            string line = TextFormatter.Format(e, _format);
 
             if(e.ErrorException != null)
             {

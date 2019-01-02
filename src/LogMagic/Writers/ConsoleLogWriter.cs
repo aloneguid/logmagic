@@ -13,15 +13,13 @@ namespace LogMagic.Writers
    class ConsoleLogWriter : ILogWriter
    {
       private readonly FormattedString _format;
-      private readonly bool _writeProperties;
 
       /// <summary>
       /// Creates class instance
       /// </summary>
-      public ConsoleLogWriter(string format, bool writeProperties)
+      public ConsoleLogWriter(string format)
       {
          _format = format == null ? null : FormattedString.Parse(format, null);
-         _writeProperties = writeProperties;
       }
 
       /// <summary>
@@ -35,7 +33,7 @@ namespace LogMagic.Writers
       {
          foreach(LogEvent e in events)
          {
-            Console.WriteLine(TextFormatter.Format(e, _format, _writeProperties));
+            Console.WriteLine(TextFormatter.Format(e, _format));
          }
       }
 

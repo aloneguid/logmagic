@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 
 namespace LogMagic.Test
 {
@@ -27,9 +22,9 @@ namespace LogMagic.Test
             .When.SeverityIsAtLeast(LogSeverity.Verbose);
 
 
-         log.Trace(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents));
+         log.Write(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents));
 
-         Assert.Equal(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents), _writer.Event.FormattedMessage);
+         Assert.Equal(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents), _writer.Event.Message);
       }
 
       [Fact]
@@ -39,7 +34,7 @@ namespace LogMagic.Test
             .WriteTo.Custom(_writer)
             .When.SeverityIsAtLeast(LogSeverity.Information);
 
-         log.Trace(nameof(SeverityFilter_WithInfoSeverity_DoesntLog));
+         log.Write(nameof(SeverityFilter_WithInfoSeverity_DoesntLog));
 
          Assert.Null(_writer.Event);
       }

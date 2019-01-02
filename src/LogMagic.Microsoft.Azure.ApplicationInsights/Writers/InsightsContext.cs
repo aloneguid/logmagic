@@ -27,29 +27,26 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          OperationTelemetryInitialiser.RoleName = e.UseProperty(KnownProperty.RoleName, string.Empty);
          OperationTelemetryInitialiser.RoleInstance = e.UseProperty(KnownProperty.RoleInstance, string.Empty);
 
-         switch(e.EventType)
+         if(e.HasProperty(KnownProperty.EventName))
          {
-            case EventType.Dependency:
-               ApplyDependency(e);
-               break;
-
-            case EventType.ApplicationEvent:
-               ApplyEvent(e);
-               break;
-
-            case EventType.HandledRequest:
-               ApplyRequest(e);
-               break;
-
-            case EventType.Metric:
-               ApplyMetric(e);
-               break;
-
-            default:
-               ApplyTrace(e);
-               break;
+            ApplyEvent(e);
          }
-
+         else if(e.HasProperty(KnownProperty.DependencyName))
+         {
+            ApplyDependency(e);
+         }
+         else if(e.HasProperty(KnownProperty.RequestName))
+         {
+            ApplyRequest(e);
+         }
+         else if(e.HasProperty(KnownProperty.MetricName))
+         {
+            ApplyMetric(e);
+         }
+         else
+         {
+            ApplyTrace(e);
+         }
       }
 
       private void ApplyDependency(LogEvent e)
@@ -85,7 +82,7 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
 
       private void ApplyTrace(LogEvent e)
       {
-         var tr = new TraceTelemetry(e.FormattedMessage, GetSeverityLevel(e));
+         var tr = new TraceTelemetry(e.Message, GetSeverityLevel(e));
          Add(tr, e);
          AddProperties(tr, e);
 
@@ -98,7 +95,7 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
             }
 
             var et = new ExceptionTelemetry(e.ErrorException);
-            et.Message = e.FormattedMessage;
+            et.Message = e.Message;
 
             Add(et, e);
             AddProperties(et, e);

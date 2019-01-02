@@ -29,7 +29,7 @@ namespace LogMagic.Storage.Net
          var sb = new StringBuilder();
          foreach (LogEvent e in events)
          {
-            sb.AppendLine(TextFormatter.Format(e, _format, true));
+            sb.AppendLine(TextFormatter.Format(e, _format));
          }
 
          Task.Run(() =>

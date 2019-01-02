@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LogMagic.Enrichers;
-using LogMagic.Tokenisation;
 
 namespace LogMagic.Tokenisation
 {
@@ -15,7 +13,7 @@ namespace LogMagic.Tokenisation
       /// <summary>
       /// Default format string used to format log text
       /// </summary>
-      public static readonly FormattedString DefaultFormat = FormattedString.Parse("{time:H:mm:ss,fff}|{level,-7}|{source}|{message}{error}", null);
+      public static readonly FormattedString DefaultFormat = FormattedString.Parse("{time:H:mm:ss,fff}|{level,-1}|{source}|{message}{parameters}{error}", null);
 
       static readonly FormattedString DefaultFormat2 = FormattedString.Parse(
          new FormattedStringBuilder()
@@ -30,11 +28,12 @@ namespace LogMagic.Tokenisation
       internal const string Message = "message";
       internal const string Error = "error";
       internal const string NewLine = "br";
+      internal const string Parameters = "parameters";
 
       /// <summary>
       /// Formats log event for text representation, not including any properties. Error is included though.
       /// </summary>
-      public static string Format(LogEvent e, FormattedString format, bool includeProperties)
+      public static string Format(LogEvent e, FormattedString format)
       {
          if (format == null) format = DefaultFormat;
 
@@ -62,7 +61,7 @@ namespace LogMagic.Tokenisation
                         b.Append(e.SourceName);
                         break;
                      case Message:
-                        b.Append(e.FormattedMessage);
+                        b.Append(e.Message);
                         break;
                      case Error:
                         if (e.ErrorException != null)
@@ -70,6 +69,9 @@ namespace LogMagic.Tokenisation
                            b.AppendLine();
                            b.Append(e.ErrorException.ToString());
                         }
+                        break;
+                     case Parameters:
+                        AddParameters(b, e);
                         break;
                      case NewLine:
                         b.AppendLine();
@@ -90,7 +92,12 @@ namespace LogMagic.Tokenisation
             }
          }
 
-         if(includeProperties && e.Properties?.Count > 0)
+         return b.ToString();
+      }
+
+      private static void AddParameters(StringBuilder b, LogEvent e)
+      {
+         if (e.Properties?.Count > 0)
          {
             int longestPropertyName = e.Properties.Max(p => p.Key.Length);
 
@@ -104,8 +111,6 @@ namespace LogMagic.Tokenisation
                b.Append(line);
             }
          }
-
-         return b.ToString();
       }
 
       private static string ToSeverityString(LogEvent e)

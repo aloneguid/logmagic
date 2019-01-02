@@ -27,7 +27,7 @@ namespace LogMagic.Test
       public void MethodName_ThisMethod_Matches()
       {
          L.Config.EnrichWith.MethodName();
-         _log.Trace("method call");
+         _log.Write("method call");
 
          Assert.Equal("LogMagic.Test.EnrichersTest.MethodName_ThisMethod_Matches()", 
             (string)_writer.Event.GetProperty(KnownProperty.MethodName));
@@ -45,7 +45,7 @@ namespace LogMagic.Test
 
       private string MethodWithParameters(string s, int i, Guid g)
       {
-         _log.Trace("parameters method");
+         _log.Write("parameters method");
          return s;
       }
 
@@ -53,10 +53,10 @@ namespace LogMagic.Test
       public void MachineIp_Current_ReturnsSomething()
       {
          L.Config.EnrichWith.MachineIpAddress();
-         _log.Trace("what's this machine IP?");
+         _log.Write("what's this machine IP?");
 
          string address = (string)_writer.Event.GetProperty(KnownProperty.NodeIp);
-         _log.Trace("address: {ipAddress}", address);
+         _log.Write("address: {ipAddress}", address);
          Assert.NotNull(address);
       }
    }

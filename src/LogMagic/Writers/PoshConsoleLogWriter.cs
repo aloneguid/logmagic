@@ -16,7 +16,6 @@ namespace LogMagic.Writers
       private static readonly ConcurrentDictionary<string, string> SourceNameToShortName = new ConcurrentDictionary<string, string>();
       private static object ColourLock = new object();
       private readonly FormattedString _format;
-      private readonly bool _logProperties;
       private const ConsoleColor SeparatorColour = ConsoleColor.DarkGray,
                                  SourceColour = ConsoleColor.DarkGray,
                                  MessageColour = ConsoleColor.White,
@@ -36,7 +35,7 @@ namespace LogMagic.Writers
       /// <summary>
       /// Constructs and instance of this class
       /// </summary>
-      public PoshConsoleLogWriter(string format, bool logProperties)
+      public PoshConsoleLogWriter(string format)
       {
          _format = format == null ? TextFormatter.DefaultFormat : FormattedString.Parse(format, null);
 
@@ -46,7 +45,6 @@ namespace LogMagic.Writers
          };
 
          Console.BackgroundColor = ConsoleColor.Black;
-         _logProperties = logProperties;
       }
 
       /// <summary>
@@ -82,6 +80,9 @@ namespace LogMagic.Writers
                      case TextFormatter.NewLine:
                         Console.WriteLine();
                         break;
+                     case TextFormatter.Parameters:
+                        LogProperties(e);
+                        break;
                      default:
                         if (e.Properties != null)
                         {
@@ -99,11 +100,6 @@ namespace LogMagic.Writers
          }
 
          Console.WriteLine();
-
-         if (_logProperties)
-         {
-            LogProperties(e);
-         }
       }
 
       private void LogProperties(LogEvent e)
@@ -116,12 +112,12 @@ namespace LogMagic.Writers
          int longestPropName = e.Properties.Keys.Max(k => k.Length);
          foreach(KeyValuePair<string, object> prop in e.Properties.Where(p => !TextFormatter.DoNotPrint(p.Key)))
          {
+            Console.WriteLine();
             Console.Write("  |");
             string name = prop.Key.PadLeft(longestPropName);
             Cg.Write(name, ParameterColour);
             Console.Write(": ");
             Cg.Write(prop.Value?.ToString(), MessageColour);
-            Console.WriteLine();
          }
       }
 
@@ -140,18 +136,7 @@ namespace LogMagic.Writers
 
       private void LogMessage(LogEvent e)
       {
-         foreach (Token token in e.Message.Tokens)
-         {
-            switch (token.Type)
-            {
-               case TokenType.String:
-                  Cg.Write(e.Message.Format(token), MessageColour);
-                  break;
-               case TokenType.Parameter:
-                  Cg.Write(e.Message.Format(token), ParameterColour);
-                  break;
-            }
-         }
+         Cg.Write(e.Message, MessageColour);
       }
 
       private void WriteSeverity(LogEvent e)

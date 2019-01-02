@@ -104,7 +104,7 @@ namespace LogMagic.Writers
          {
             CheckRolling(e.EventTime);
 
-            _writer.WriteLine(TextFormatter.Format(e, null, true));
+            _writer.WriteLine(TextFormatter.Format(e, null));
          }
 
          _writer.Flush();
@@ -116,7 +116,7 @@ namespace LogMagic.Writers
          {
             CheckRolling(e.EventTime);
 
-            await _writer.WriteLineAsync(TextFormatter.Format(e, null, true));
+            await _writer.WriteLineAsync(TextFormatter.Format(e, null));
          }
 
          _writer.Flush();

@@ -1,5 +1,4 @@
-﻿using LogMagic.Enrichers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -78,7 +77,7 @@ namespace LogMagic.Writers
             {
                Timestamp = new DateTimeOffset(e.EventTime),
                Level = "info",
-               MessageTemplate = e.Message.Template,
+               MessageTemplate = e.Message,
                Exception = e.GetProperty(KnownProperty.Error)?.ToString(),
             };
 
