@@ -121,7 +121,7 @@ namespace LogMagic
          for (int i = 0; i < maxLength; i += 2)
          {
             object keyObj = properties[i];
-            if (!(keyObj is string key)) throw new ArgumentOutOfRangeException($"{nameof(properties)}[{i}]", "parameter must be of string type");
+            if (!(keyObj is string key)) throw new ArgumentOutOfRangeException($"{nameof(properties)}[{i}]", "parameter must be of string type as it's meant to be a parameter name");
 
             d[key] = properties[i + 1];
          }
