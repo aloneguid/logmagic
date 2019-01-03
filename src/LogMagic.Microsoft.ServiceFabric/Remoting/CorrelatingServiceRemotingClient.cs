@@ -52,7 +52,7 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
 
          using (var time = new TimeMeasure())
          {
-            using (L.Context(KnownProperty.ActivityId, dependencyId))   //dependency ID travels to the server as parent Id
+            using (_log.Context(KnownProperty.ActivityId, dependencyId))   //dependency ID travels to the server as parent Id
             {
                Exception gex = null;
                _enricher.Enrich(requestMessage);

@@ -32,7 +32,6 @@
    </PropertyGroup>
    <ItemGroup>
       <PackageReference Include="netbox" Version="2.1.5" />
-      <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
    </ItemGroup>
    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' Or '$(TargetFramework)' == 'netstandard1.6' ">
       <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />

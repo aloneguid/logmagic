@@ -37,18 +37,15 @@ namespace LogMagic.Writers
             {
                Trace.TraceError(line);
             }
+            else if(e.Severity == LogSeverity.Warning)
+            {
+               Trace.TraceWarning(line);
+            }
             else
             {
                Trace.TraceInformation(line);
             }
          }
-      }
-
-      public Task WriteAsync(IEnumerable<LogEvent> events)
-      {
-         Write(events);
-
-         return Task.FromResult(true);
       }
    }
 }

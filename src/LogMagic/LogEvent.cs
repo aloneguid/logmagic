@@ -50,6 +50,17 @@ namespace LogMagic
       }
 
       /// <summary>
+      /// Gets log severity, which defaults to <see cref="LogSeverity.Verbose"/> if not present
+      /// </summary>
+      public LogSeverity Severity
+      {
+         get
+         {
+            return GetProperty<LogSeverity>(KnownProperty.Severity, LogSeverity.Verbose);
+         }
+      }
+
+      /// <summary>
       /// Adds a new property to this event
       /// </summary>
       public void AddProperty(string name, object value)

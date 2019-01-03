@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace LogMagic
 {
@@ -8,16 +7,14 @@ namespace LogMagic
    /// </summary>
    public static class L
    {
+      private static LogConfiguration _config = new LogConfiguration();
 
       /// <summary>
       /// Gets logging library configuration
       /// </summary>
-      public static ILogConfiguration Config => DefaultContainer.Config;
+      public static ILogConfiguration Config => _config;
 
-      /// <summary>
-      /// Default logging container
-      /// </summary>
-      public static LogContainer DefaultContainer { get; } = new LogContainer();
+      internal static LogConfiguration LogConfig => _config;
 
       /// <summary>
       /// Get logger for the specified type
@@ -25,7 +22,7 @@ namespace LogMagic
       /// </summary>
       public static ILog G<T>()
       {
-         return DefaultContainer.G<T>();
+         return new LogClient(Config, typeof(T).FullName);
       }
 
       /// <summary>
@@ -33,7 +30,7 @@ namespace LogMagic
       /// </summary>
       public static ILog G(Type t)
       {
-         return DefaultContainer.G(t);
+         return new LogClient(Config, t.FullName);
       }
 
       /// <summary>
@@ -41,51 +38,7 @@ namespace LogMagic
       /// </summary>
       public static ILog G(string name)
       {
-         return DefaultContainer.G(name);
+         return new LogClient(Config, name);
       }
-
-#if !NET45
-
-      /// <summary>
-      /// Adds one or more context properties.
-      /// </summary>
-      /// <param name="properties">
-      /// Array or properties where even numbers are property names and odd numbers are property values.
-      /// If you have an odd number of array elements the last one is discarded.
-      /// </param>
-      public static IDisposable Context(params string[] properties)
-      {
-         return DefaultContainer.Context(properties);
-      }
-
-      /// <summary>
-      /// Adds a context property
-      /// </summary>
-      public static IDisposable Context(Dictionary<string, string> properties)
-      {
-         return DefaultContainer.Context(properties);
-      }
-
-      /// <summary>
-      /// Gets a context property by name
-      /// </summary>
-      /// <param name="propertyName">Property name</param>
-      /// <returns></returns>
-      public static string GetContextValue(string propertyName)
-      {
-         return DefaultContainer.GetContextValue(propertyName);
-      }
-
-      /// <summary>
-      /// Gets a dictionary of all current context values
-      /// </summary>
-      /// <returns></returns>
-      public static Dictionary<string, string> GetContextValues()
-      {
-         return DefaultContainer.GetContextValues();
-      }
-
-#endif
-
    }
 }

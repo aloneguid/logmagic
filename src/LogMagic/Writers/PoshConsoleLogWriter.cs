@@ -141,43 +141,26 @@ namespace LogMagic.Writers
 
       private void WriteSeverity(LogEvent e)
       {
-         object sevObj = e.GetProperty(KnownProperty.Severity);
-
-         if (sevObj is LogSeverity sev)
+         switch (e.Severity)
          {
-
-            switch (sev)
-            {
-               case LogSeverity.Critical:
-                  Cg.Write("CRT", ConsoleColor.White, ConsoleColor.Red);
-                  break;
-               case LogSeverity.Error:
-                  Cg.Write("ERR", ConsoleColor.White, ConsoleColor.Red);
-                  break;
-               case LogSeverity.Information:
-                  Cg.Write("INF", ConsoleColor.White, ConsoleColor.Red);
-                  break;
-               case LogSeverity.Verbose:
-                  Cg.Write("DBG", ConsoleColor.White, ConsoleColor.Red);
-                  break;
-               case LogSeverity.Warning:
-                  Cg.Write("WRN", ConsoleColor.White, ConsoleColor.Red);
-                  break;
-               default:
-                  Cg.Write("INF", ConsoleColor.White, ConsoleColor.DarkGreen);
-                  break;
-            }
-         }
-         else
-         {
-            if (e.ErrorException == null)
-            {
-               Cg.Write("INF", ConsoleColor.White, ConsoleColor.DarkGreen);
-            }
-            else
-            {
-               Cg.Write("ERR", ConsoleColor.White, ConsoleColor.Red);
-            }
+            case LogSeverity.Critical:
+               Cg.Write("C", ConsoleColor.White, ConsoleColor.Red);
+               break;
+            case LogSeverity.Error:
+               Cg.Write("E", ConsoleColor.White, ConsoleColor.Red);
+               break;
+            case LogSeverity.Information:
+               Cg.Write("I", ConsoleColor.White, ConsoleColor.DarkGreen);
+               break;
+            case LogSeverity.Verbose:
+               Cg.Write("V", ConsoleColor.White, ConsoleColor.Black);
+               break;
+            case LogSeverity.Warning:
+               Cg.Write("W", ConsoleColor.White, ConsoleColor.Red);
+               break;
+            default:
+               Cg.Write("I", ConsoleColor.White, ConsoleColor.DarkGreen);
+               break;
          }
       }
 

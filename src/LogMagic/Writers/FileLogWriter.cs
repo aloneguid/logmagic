@@ -109,17 +109,5 @@ namespace LogMagic.Writers
 
          _writer.Flush();
       }
-
-      public async Task WriteAsync(IEnumerable<LogEvent> events)
-      {
-         foreach (LogEvent e in events)
-         {
-            CheckRolling(e.EventTime);
-
-            await _writer.WriteLineAsync(TextFormatter.Format(e, null));
-         }
-
-         _writer.Flush();
-      }
    }
 }

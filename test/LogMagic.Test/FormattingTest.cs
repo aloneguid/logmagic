@@ -12,11 +12,10 @@ namespace LogMagic.Test
       public FormattingTest()
       {
          _writer = new TestWriter();
-         L.Config.ClearWriters();
-         L.Config.ClearEnrichers();
+         L.Config.Reset();
          L.Config
             .WriteTo.Trace()
-            .WriteTo.Custom(_writer)
+            .WriteTo.Writer(_writer)
             .EnrichWith.ThreadId()
             .EnrichWith.Constant("node", "test");
       }

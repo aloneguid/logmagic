@@ -8,6 +8,6 @@
       /// <summary>
       /// Adds a custom enricher
       /// </summary>
-      ILogConfiguration Custom(IEnricher enricher);
+      ILogConfiguration Enricher(IEnricher enricher);
    }
 }

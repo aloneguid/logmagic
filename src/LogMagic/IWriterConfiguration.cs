@@ -10,6 +10,6 @@
       /// </summary>
       /// <param name="writer"></param>
       /// <returns></returns>
-      ILogConfiguration Custom(ILogWriter writer);
+      ILogConfiguration Writer(ILogWriter writer);
    }
 }

@@ -29,7 +29,7 @@ namespace LogMagic
          }
 
          //enrich
-         Enrich(e, L.Config.Enrichers);
+         Enrich(e, L.LogConfig.Enrichers);
 #if NETSTANDARD || NET46
          Enrich(e, LogContext.Enrichers?.Values);
 #endif

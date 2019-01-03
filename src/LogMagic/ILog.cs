@@ -14,5 +14,30 @@ namespace LogMagic
       /// <param name="message">Log message</param>
       /// <param name="properties">Optional properties</param>
       void Write(string message, IDictionary<string, object> properties = null);
+
+#if !NET45
+
+      /// <summary>
+      /// Creates a disposable logging context that enriches it with custom properties
+      /// </summary>
+      /// <param name="properties"></param>
+      /// <returns></returns>
+      IDisposable Context(IDictionary<string, object> properties);
+
+      /// <summary>
+      /// Gets current context value by property name.
+      /// </summary>
+      /// <param name="propertyName"></param>
+      /// <returns>Context value or null if context has not value of such property.</returns>
+      object GetContextValue(string propertyName);
+
+      /// <summary>
+      /// Gets a dictionary of all current context values
+      /// </summary>
+      /// <returns></returns>
+      IDictionary<string, object> GetContextValues();
+
+#endif
+
    }
 }

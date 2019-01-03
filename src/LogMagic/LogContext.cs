@@ -13,14 +13,14 @@ namespace LogMagic
       private static readonly AsyncLocal<ConcurrentDictionary<string, IEnricher>> Data =
          new AsyncLocal<ConcurrentDictionary<string, IEnricher>>();
 
-      public static IDisposable Push(IEnumerable<KeyValuePair<string, string>> properties)
+      public static IDisposable Push(IEnumerable<KeyValuePair<string, object>> properties)
       {
          ConcurrentDictionary<string, IEnricher> stack = GetOrCreateEnricherStack();
          var bookmark = new StackBookmark(Clone(stack));
 
          if (properties != null)
          {
-            foreach (KeyValuePair<string, string> pair in properties)
+            foreach (KeyValuePair<string, object> pair in properties)
             {
                stack[pair.Key] = new ConstantEnricher(pair);
             }
@@ -55,7 +55,7 @@ namespace LogMagic
          set => Data.Value = value;
       }
 
-      public static string GetValueByName(string name)
+      public static object GetValueByName(string name)
       {
          ConcurrentDictionary<string, IEnricher> enrichers = Enrichers;
 
@@ -71,11 +71,11 @@ namespace LogMagic
          return enricher.Value;
       }
 
-      public static Dictionary<string, string> GetAllValues()
+      public static Dictionary<string, object> GetAllValues()
       {
          ConcurrentDictionary<string, IEnricher> enrichers = Enrichers;
 
-         if (enrichers == null) return new Dictionary<string, string>();
+         if (enrichers == null) return new Dictionary<string, object>();
 
          return enrichers
             .Values

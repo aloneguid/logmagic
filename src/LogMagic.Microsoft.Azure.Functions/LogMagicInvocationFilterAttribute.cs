@@ -27,7 +27,7 @@ namespace Microsoft.Azure.WebJobs
       {
          Dictionary<string, string> context = GetIncomingContext();
 
-         using (L.Context(context))
+         using (log.Context(context))
          {
             using (var time = new TimeMeasure())
             {
@@ -44,7 +44,7 @@ namespace Microsoft.Azure.WebJobs
                }
                finally
                {
-                  using (L.Context(
+                  using (log.Context(
                      "FunctionName", executingContext.FunctionName,
                      "FunctionInstanceId", executingContext.FunctionInstanceId.ToString()))
                   {

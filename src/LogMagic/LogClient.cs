@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Linq;
+using System.Diagnostics;
 
 namespace LogMagic
 {
@@ -13,6 +13,8 @@ namespace LogMagic
       private readonly ILogConfiguration _config;
       private readonly string _name;
       private readonly EventFactory _factory;
+      private ILogWriter[] _writers;
+      private IFilter[] _filters;
 
       public LogClient(ILogConfiguration config, string name)
       {
@@ -21,7 +23,39 @@ namespace LogMagic
          _factory = new EventFactory();
       }
 
-      [MethodImpl(MethodImplOptions.NoInlining)]
+      public void Write(string message, IDictionary<string, object> properties)
+      {
+         Serve(message, properties);
+      }
+
+#if !NET45
+
+      public IDisposable Context(IDictionary<string, object> properties)
+      {
+         if (properties == null || properties.Count == 0) return null;
+
+         return LogContext.Push(properties);
+      }
+
+      public object GetContextValue(string propertyName)
+      {
+         if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+
+         return LogContext.GetValueByName(propertyName);
+      }
+
+      /// <summary>
+      /// Gets a dictionary of all current context values
+      /// </summary>
+      /// <returns></returns>
+      public IDictionary<string, object> GetContextValues()
+      {
+         return LogContext.GetAllValues();
+      }
+
+#endif
+
+
       internal void Serve(
          string message,
          IDictionary<string, object> properties)
@@ -33,31 +67,30 @@ namespace LogMagic
 
       private void SubmitNow(LogEvent e)
       {
-         foreach (ILogWriter writer in new List<ILogWriter>(_config.Writers))
+         if(_writers == null)
+         {
+            _writers = L.LogConfig.Writers.ToArray();
+            _filters = L.LogConfig.Filters.ToArray();
+         }
+
+         bool active = _filters.Length == 0 || _filters.Any(f => f.Match(e));
+
+         if (!active) return;
+
+         foreach (ILogWriter writer in _writers)
          {
             try
             {
-               IReadOnlyCollection<IFilter> filters = _config.GetFilters(writer);
-               bool active = filters == null || filters.Any(f => f.Match(e));
-
-               if (active)
-               {
-                  writer.Write(new[] { e });
-               }
+               writer.Write(new[] { e });
             }
             catch(Exception ex)
             {
                //there is nowhere else to log the error as we are the logger!
-               Console.WriteLine("could not write: " + ex);
+               Trace.TraceError("could not write: " + ex);
             }
          }
       }
 
-      [MethodImpl(MethodImplOptions.NoInlining)]
-      public void Write(string message, IDictionary<string, object> properties)
-      {
-         Serve(message, properties);
-      }
 
       /*[MethodImpl(MethodImplOptions.NoInlining)]
       public void Dependency(string type, string name, string command, long duration, Exception error, Dictionary<string, object> properties)

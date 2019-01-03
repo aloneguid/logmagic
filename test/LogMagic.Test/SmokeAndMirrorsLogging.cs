@@ -58,7 +58,7 @@ namespace LogMagic.Test
             .UseEnvironmentVariables()
             .Build();
 
-         L.Config.ClearWriters();
+         L.Config.Reset();
 
          switch (receiverName)
          {

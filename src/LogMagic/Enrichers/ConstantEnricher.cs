@@ -5,22 +5,22 @@ namespace LogMagic.Enrichers
    class ConstantEnricher : IEnricher
    {
       private readonly string _propertyName;
-      private readonly string _propertyValue;
+      private readonly object _propertyValue;
 
-      public ConstantEnricher(string propertyName, string propertyValue)
+      public ConstantEnricher(string propertyName, object propertyValue)
       {
          _propertyName = propertyName;
          _propertyValue = propertyValue;
       }
 
-      public ConstantEnricher(KeyValuePair<string, string> constant) : this(constant.Key, constant.Value)
+      public ConstantEnricher(KeyValuePair<string, object> constant) : this(constant.Key, constant.Value)
       {
 
       }
 
       public string Name => _propertyName;
 
-      public string Value => _propertyValue;
+      public object Value => _propertyValue;
 
       public void Enrich(LogEvent e, out string propertyName, out object propertyValue)
       {

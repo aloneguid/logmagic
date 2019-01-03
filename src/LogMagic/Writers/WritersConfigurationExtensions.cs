@@ -13,7 +13,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Console(this IWriterConfiguration configuration)
       {
-         return configuration.Custom(new ConsoleLogWriter(null));
+         return configuration.Writer(new ConsoleLogWriter(null));
       }
 
       /// <summary>
@@ -21,7 +21,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Console(this IWriterConfiguration configuration, string format)
       {
-         return configuration.Custom(new ConsoleLogWriter(format));
+         return configuration.Writer(new ConsoleLogWriter(format));
       }
 
       /// <summary>
@@ -29,7 +29,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration PoshConsole(this IWriterConfiguration configuration)
       {
-         return configuration.Custom(new PoshConsoleLogWriter(null));
+         return configuration.Writer(new PoshConsoleLogWriter(null));
       }
 
       /// <summary>
@@ -37,7 +37,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration PoshConsole(this IWriterConfiguration configuration, string format)
       {
-         return configuration.Custom(new PoshConsoleLogWriter(format));
+         return configuration.Writer(new PoshConsoleLogWriter(format));
       }
 
       /// <summary>
@@ -45,7 +45,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Trace(this IWriterConfiguration configuration)
       {
-         return configuration.Custom(new TraceLogWriter(null));
+         return configuration.Writer(new TraceLogWriter(null));
       }
 
       /// <summary>
@@ -53,7 +53,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Trace(this IWriterConfiguration configuration, string format)
       {
-         return configuration.Custom(new TraceLogWriter(format));
+         return configuration.Writer(new TraceLogWriter(format));
       }
 
       /// <summary>
@@ -61,7 +61,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration File(this IWriterConfiguration configuration, string fileName)
       {
-         return configuration.Custom(new FileLogWriter(fileName, null));
+         return configuration.Writer(new FileLogWriter(fileName, null));
       }
 
       /// <summary>
@@ -69,7 +69,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration File(this IWriterConfiguration configuration, string fileName, string format)
       {
-         return configuration.Custom(new FileLogWriter(fileName, format));
+         return configuration.Writer(new FileLogWriter(fileName, format));
       }
 
       /// <summary>
@@ -77,7 +77,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Seq(this IWriterConfiguration configuration, Uri serverAddress)
       {
-         return configuration.Custom(new SeqWriter(serverAddress, null));
+         return configuration.Writer(new SeqWriter(serverAddress, null));
       }
 
       /// <summary>
@@ -85,7 +85,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Seq(this IWriterConfiguration configuration, Uri serverAddress, string apiKey)
       {
-         return configuration.Custom(new SeqWriter(serverAddress, apiKey));
+         return configuration.Writer(new SeqWriter(serverAddress, apiKey));
       }
    }
 }

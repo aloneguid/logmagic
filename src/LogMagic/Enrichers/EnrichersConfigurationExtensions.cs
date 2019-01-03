@@ -12,7 +12,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration ThreadId(this IEnricherConfiguration configuration)
       {
-         return configuration.Custom(new ThreadInfoEnricher());
+         return configuration.Enricher(new ThreadInfoEnricher());
       }
 
       /// <summary>
@@ -22,7 +22,7 @@ namespace LogMagic
          string propertyName,
          string propertyValue)
       {
-         return configuration.Custom(new ConstantEnricher(propertyName, propertyValue));
+         return configuration.Enricher(new ConstantEnricher(propertyName, propertyValue));
       }
 
 #if NETFULL
@@ -32,7 +32,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration MethodName(this IEnricherConfiguration configuration)
       {
-         return configuration.Custom(new MethodNameEnricher());
+         return configuration.Enricher(new MethodNameEnricher());
       }
 #endif
 
@@ -42,7 +42,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration MachineName(this IEnricherConfiguration configuration)
       {
-         return configuration.Custom(new MachineNameEnricher());
+         return configuration.Enricher(new MachineNameEnricher());
       }
 #endif
 
@@ -51,7 +51,7 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration MachineIpAddress(this IEnricherConfiguration configuration, bool includeIpV6 = false)
       {
-         return configuration.Custom(new MachineIpEnricher(includeIpV6));
+         return configuration.Enricher(new MachineIpEnricher(includeIpV6));
       }
    }
 }

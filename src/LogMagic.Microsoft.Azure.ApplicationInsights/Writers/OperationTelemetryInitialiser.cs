@@ -9,6 +9,8 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
 {
    class OperationTelemetryInitialiser : ITelemetryInitializer
    {
+      private static readonly ILog log = L.G(typeof(OperationTelemetryInitialiser));
+
       public static string Version { get; set; }
 
       public static string RoleName { get; set; }
@@ -22,7 +24,7 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          telemetry.Context.Cloud.RoleName = RoleName;
 
 #if !NET45
-         string operationId = L.GetContextValue(KnownProperty.OperationId);
+         string operationId = log.GetContextValue<string>(KnownProperty.OperationId);
          telemetry.Context.Operation.Id = operationId;
 #endif
       }

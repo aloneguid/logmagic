@@ -23,7 +23,7 @@ namespace LogMagic
          string documentId,
          string format = null)
       {
-         return configuration.Custom(new BlobStorageLogWriter(blobStorage, documentId, format));
+         return configuration.Writer(new BlobStorageLogWriter(blobStorage, documentId, format));
       }
 
       /// <summary>

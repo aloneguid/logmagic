@@ -22,6 +22,7 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
       private readonly ILog _log;
       private readonly Action<CallSummary> _raiseSummary;
       private static FieldInfo getHeadersField;
+      private static readonly ILog log = L.G(typeof(CorrelatingRemotingMessageHandler));
 
       public CorrelatingRemotingMessageHandler(ILog log, ServiceContext serviceContext, IService serviceImplementation, Action<CallSummary> raiseSummary)
       {
@@ -61,7 +62,7 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
          string methodName = MethodResolver.GetMethodName(requestMessage);
 
          Exception gex = null;
-         using (L.Context(context))
+         using (log.Context(context))
          {
             using (var time = new TimeMeasure())
             {

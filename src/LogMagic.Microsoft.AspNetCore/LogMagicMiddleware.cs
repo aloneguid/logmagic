@@ -28,7 +28,7 @@ namespace LogMagic.Microsoft.AspNetCore
 
          //everything happening inside this request will have a proper operation id and
          //parent activity id set from correlation context
-         using (L.Context(correlationContext))
+         using (log.Context(correlationContext))
          {
             using (var time = new TimeMeasure())
             {
@@ -48,7 +48,7 @@ namespace LogMagic.Microsoft.AspNetCore
                   string responseCode = context.Response.StatusCode.ToString();
 
                   // request will have a new ID but parentId is fetched from current context which links it appropriately
-                  using (L.Context(
+                  using (log.Context(
                      KnownProperty.RequestUri, uri,
                      KnownProperty.ResponseCode, responseCode))
                   {

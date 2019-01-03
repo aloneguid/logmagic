@@ -9,17 +9,15 @@ namespace LogMagic.Test
 
       public FiltersTest()
       {
-         L.Config.ClearWriters();
-         L.Config.ClearFilters();
-
+         L.Config.Reset();
       }
 
       [Fact]
       public void SeverityFilter_WithMinSeverity_LogsAllEvents()
       {
          L.Config
-            .WriteTo.Custom(_writer)
-            .When.SeverityIsAtLeast(LogSeverity.Verbose);
+            .WriteTo.Writer(_writer)
+            .FilterBy.MinLogSeverity(LogSeverity.Verbose);
 
 
          log.Write(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents));
@@ -31,8 +29,8 @@ namespace LogMagic.Test
       public void SeverityFilter_WithInfoSeverity_DoesntLog()
       {
          L.Config
-            .WriteTo.Custom(_writer)
-            .When.SeverityIsAtLeast(LogSeverity.Information);
+            .WriteTo.Writer(_writer)
+            .FilterBy.MinLogSeverity(LogSeverity.Information);
 
          log.Write(nameof(SeverityFilter_WithInfoSeverity_DoesntLog));
 

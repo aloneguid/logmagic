@@ -27,7 +27,7 @@ namespace LogMagic
             EnableQuickPulse = quickPulse
          };
 
-         return configuration.Custom(new ApplicationInsightsWriter(instrumentationKey, options));
+         return configuration.Writer(new ApplicationInsightsWriter(instrumentationKey, options));
       }
 
       /// <summary>
@@ -40,7 +40,7 @@ namespace LogMagic
       {
          if (options == null) options = new WriterOptions();
 
-         return configuration.Custom(new ApplicationInsightsWriter(instrumentationKey, options));
+         return configuration.Writer(new ApplicationInsightsWriter(instrumentationKey, options));
       }
    }
 }

@@ -15,15 +15,15 @@ namespace LogMagic
       /// </summary>
       public static ILogConfiguration Lambda(this IFilterConfiguration configuration, Func<LogEvent, bool> func)
       {
-         return configuration.Custom(new LambdaFilter(func));
+         return configuration.Filter(new LambdaFilter(func));
       }
 
       /// <summary>
       /// Applies log severity filter by matching everything that is greater than or equal to <paramref name="minSeverity"/>
       /// </summary>
-      public static ILogConfiguration SeverityIsAtLeast(this IFilterConfiguration configuration, LogSeverity minSeverity)
+      public static ILogConfiguration MinLogSeverity(this IFilterConfiguration configuration, LogSeverity minSeverity)
       {
-         return configuration.Custom(new MinLogSeverityFilter(minSeverity));
+         return configuration.Filter(new MinLogSeverityFilter(minSeverity));
       }
    }
 }

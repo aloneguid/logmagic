@@ -38,7 +38,8 @@ namespace LogMagic.Console
          L.Config
             .WriteTo.Trace()
             .WriteTo.Console()
-            .WriteTo.PoshConsole();
+            .WriteTo.PoshConsole()
+            .FilterBy.MinLogSeverity(LogSeverity.Verbose);
 
          log.Write("test1");
 
@@ -50,7 +51,7 @@ namespace LogMagic.Console
 
          log.Error("test", new NullReferenceException());
 
-         using (L.Context("one", "two"))
+         using (log.Context("one", "two"))
          {
             log.Write("just a test");
          }
@@ -69,7 +70,7 @@ namespace LogMagic.Console
 
       private static void Basics(int maxObjects)
       {
-         using (L.Context(
+         using (log.Context(
             "Scenario", "Basics",
             KnownProperty.OperationId, Guid.NewGuid().ToString()))
          {
@@ -95,7 +96,7 @@ namespace LogMagic.Console
 
       private static void ApplicationMap()
       {
-         using (L.Context(KnownProperty.OperationId, Guid.NewGuid().ToString()))
+         using (log.Context(KnownProperty.OperationId, Guid.NewGuid().ToString()))
          {
             string webSiteActivityId = Guid.NewGuid().ToShortest();
             string serverActivityId = Guid.NewGuid().ToShortest();
@@ -103,21 +104,21 @@ namespace LogMagic.Console
             Exception ex = RandomGenerator.GetRandomInt(10) > 7 ? new Exception("simulated failure") : null;
 
             //---- web site
-            using (L.Context(
+            using (log.Context(
                KnownProperty.RoleName, "Web Site"))
             {
                log.Request("LogIn", RandomDurationMs(500, 600), ex);
 
                log.Write("checking credentials on the server...");
 
-               using (L.Context(KnownProperty.ActivityId, webSiteActivityId))
+               using (log.Context(KnownProperty.ActivityId, webSiteActivityId))
                {
                   log.Dependency("Server", "Server", "CheckCredential", 100);
                }
             }
 
             //---- server
-            using (L.Context(
+            using (log.Context(
                KnownProperty.RoleName, "Server",
                KnownProperty.ParentActivityId, webSiteActivityId,
                KnownProperty.ActivityId, serverActivityId))

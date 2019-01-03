@@ -29,7 +29,7 @@ namespace LogMagic
       /// </summary>
       /// <param name="filter">Filter reference</param>
       /// <returns>Log configuration</returns>
-      ILogConfiguration Custom(IFilter filter);
+      ILogConfiguration Filter(IFilter filter);
    }
 
    /// <summary>
@@ -56,44 +56,14 @@ namespace LogMagic
    public interface ILogConfiguration
    {
       /// <summary>
-      /// Removes all configured filters
+      /// Resets configuration by clearing all writers etc.
       /// </summary>
-      /// <returns></returns>
-      ILogConfiguration ClearFilters();
-
-      /// <summary>
-      /// Removes all configured writers
-      /// </summary>
-      /// <returns></returns>
-      ILogConfiguration ClearWriters();
-
-      /// <summary>
-      /// Removes all configured enrichers
-      /// </summary>
-      /// <returns></returns>
-      ILogConfiguration ClearEnrichers();
+      void Reset();
 
       /// <summary>
       /// Calls dispose on all configured writers
       /// </summary>
       void Shutdown();
-
-      /// <summary>
-      /// Gets the list of configured enrichers
-      /// </summary>
-      IEnumerable<IEnricher> Enrichers { get; }
-
-      /// <summary>
-      /// Gets the list of configured writers
-      /// </summary>
-      IEnumerable<ILogWriter> Writers { get; }
-
-      /// <summary>
-      /// Get available filters for a log writer
-      /// </summary>
-      /// <param name="writer"></param>
-      /// <returns></returns>
-      IReadOnlyCollection<IFilter> GetFilters(ILogWriter writer);
 
       /// <summary>
       /// Get configured performance counters
@@ -113,7 +83,7 @@ namespace LogMagic
       /// <summary>
       /// Entry point to filters configuration
       /// </summary>
-      IFilterConfiguration When { get; }
+      IFilterConfiguration FilterBy { get; }
 
       /// <summary>
       /// Performance counters configuration

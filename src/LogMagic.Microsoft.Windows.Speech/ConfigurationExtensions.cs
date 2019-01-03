@@ -12,7 +12,7 @@ namespace LogMagic
       public static ILogConfiguration WindowsSpeech(this IWriterConfiguration configuration,
          string whatToSayOnError, bool speakErrorMessage)
       {
-         return configuration.Custom(new WindowsSpeechLogWriter(whatToSayOnError, speakErrorMessage));
+         return configuration.Writer(new WindowsSpeechLogWriter(whatToSayOnError, speakErrorMessage));
       }
 
    }

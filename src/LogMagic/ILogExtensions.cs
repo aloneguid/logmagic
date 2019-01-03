@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace LogMagic
 {
@@ -17,11 +16,11 @@ namespace LogMagic
       /// <param name="parameters"></param>
       public static void Write(this ILog log, string message, params object[] parameters)
       {
-         log.Write(message, Compress(true, parameters));
+         log.Write(message, ToDictionary(true, parameters));
       }
 
       /// <summary>
-      /// 
+      /// Writes a message as an error, by adding <see cref="KnownProperty.Error"/> property and setting <see cref="KnownProperty.Severity"/> to <see cref="LogSeverity.Error"/>
       /// </summary>
       /// <param name="log"></param>
       /// <param name="message"></param>
@@ -29,11 +28,42 @@ namespace LogMagic
       /// <param name="parameters"></param>
       public static void Error(this ILog log, string message, Exception error, params object[] parameters)
       {
-         IDictionary<string, object> ps = Compress(false, parameters);
+         IDictionary<string, object> ps = ToDictionary(false, parameters);
          ps[KnownProperty.Error] = error;
+         ps[KnownProperty.Severity] = LogSeverity.Error;
 
          log.Write(message, ps);
       }
+
+#if !NET45
+
+      /// <summary>
+      /// Creates a disposable logging context that enriches it with custom properties
+      /// </summary>
+      /// <param name="log"></param>
+      /// <param name="parameters"></param>
+      /// <returns></returns>
+      public static IDisposable Context(this ILog log, params object[] parameters)
+      {
+         return log.Context(ToDictionary(true, parameters));
+      }
+
+      /// <summary>
+      /// Gets context value
+      /// </summary>
+      /// <typeparam name="T"></typeparam>
+      /// <param name="log"></param>
+      /// <param name="propertyName"></param>
+      /// <param name="defaultValue"></param>
+      /// <returns></returns>
+      public static T GetContextValue<T>(this ILog log, string propertyName, T defaultValue = default(T))
+      {
+         object result = log.GetContextValue(propertyName);
+         if (result is T) return (T)result;
+         return defaultValue;
+      }
+
+#endif
 
       /// <summary>
       /// 
@@ -57,7 +87,7 @@ namespace LogMagic
          Exception error = null,
          params object[] properties)
       {
-         log.Dependency(type, name, command, duration, error, Compress(true, properties));
+         log.Dependency(type, name, command, duration, error, ToDictionary(true, properties));
       }
 
       /// <summary>
@@ -67,32 +97,7 @@ namespace LogMagic
          Exception error,
          params object[] properties)
       {
-         log.Dependency(name, name, command, duration, error, Compress(true, properties));
-      }
-
-      /// <summary>
-      /// Track dependency with automation time measurement and error handling
-      /// </summary>
-      public static async Task<T> DependencyAsync<T>(this ILog log, string name, string command,
-         Task<T> action,
-         params object[] properties)
-      {
-         using (var time = new TimeMeasure())
-         {
-            try
-            {
-               T result = await action;
-
-               log.Dependency(name, name, command, time.ElapsedTicks, null, properties);
-
-               return result;
-            }
-            catch(Exception ex)
-            {
-               log.Dependency(name, name, command, time.ElapsedTicks, ex, properties);
-               throw;
-            }
-         }
+         log.Dependency(name, name, command, duration, error, ToDictionary(true, properties));
       }
 
       /// <summary>
@@ -100,7 +105,7 @@ namespace LogMagic
       /// </summary>
       public static void Request(this ILog log, string name, long duration, Exception error = null, params object[] properties)
       {
-         log.Request(name, duration, error, Compress(true, properties));
+         log.Request(name, duration, error, ToDictionary(true, properties));
       }
 
       /// <summary>
@@ -108,10 +113,10 @@ namespace LogMagic
       /// </summary>
       public static void Event(this ILog log, string name, params object[] properties)
       {
-         log.Event(name, Compress(true, properties));
+         log.Event(name, ToDictionary(true, properties));
       }
 
-      private static IDictionary<string, object> Compress(bool allowNullResult, params object[] properties)
+      private static IDictionary<string, object> ToDictionary(bool allowNullResult, params object[] properties)
       {
          if ((properties == null || properties.Length == 0) && allowNullResult) return null;
 

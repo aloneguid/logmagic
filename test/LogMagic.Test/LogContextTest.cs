@@ -14,14 +14,14 @@ namespace LogMagic.Test
       [Fact]
       public void Context_pushes_properties_and_removes_on_exit()
       {
-         Assert.Null(L.GetContextValue("p1"));
+         Assert.Null(log.GetContextValue("p1"));
 
-         using (L.Context("p1", "v1"))
+         using (log.Context("p1", "v1"))
          {
-            Assert.Equal("v1", L.GetContextValue("p1"));
+            Assert.Equal("v1", log.GetContextValue("p1"));
          }
 
-         Assert.Null(L.GetContextValue("p1"));
+         Assert.Null(log.GetContextValue("p1"));
       }
    }
 }

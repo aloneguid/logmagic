@@ -115,13 +115,7 @@ namespace LogMagic.Tokenisation
 
       private static string ToSeverityString(LogEvent e)
       {
-         object sevObj = e.GetProperty(KnownProperty.Severity);
-         if(!(sevObj is LogSeverity sev))
-         {
-            return e.ErrorException == null ? "I" : "E";
-         }
-
-         switch(sev)
+         switch(e.Severity)
          {
             case LogSeverity.Critical:
                return "C";
@@ -130,7 +124,7 @@ namespace LogMagic.Tokenisation
             case LogSeverity.Information:
                return "I";
             case LogSeverity.Verbose:
-               return "D";
+               return "V";
             case LogSeverity.Warning:
                return "W";
             default:

@@ -21,7 +21,7 @@ namespace LogMagic
       /// <returns></returns>
       public static ILogConfiguration AzureServiceFabricHealthReport(this IWriterConfiguration configuration, ServiceContext context)
       {
-         return configuration.Custom(new HealthReportWriter(context));
+         return configuration.Writer(new HealthReportWriter(context));
       }
 
       /// <summary>
@@ -32,7 +32,7 @@ namespace LogMagic
       /// <returns></returns>
       public static ILogConfiguration AzureServiceFabricContext(this IEnricherConfiguration configuration, ServiceContext context)
       {
-         return configuration.Custom(new ServiceFabricEnricher(context));
+         return configuration.Enricher(new ServiceFabricEnricher(context));
       }
 
       public static ServiceInstanceListener CreateCorrelatingServiceInstanceListener<TServiceInterface>(this StatelessService service,

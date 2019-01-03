@@ -13,12 +13,11 @@ namespace LogMagic.Test
       {
          _writer = new TestWriter();
 
-         L.Config.ClearWriters();
-         L.Config.ClearEnrichers();
+         L.Config.Reset();
 
          L.Config
             .WriteTo.Trace()
-            .WriteTo.Custom(_writer);
+            .WriteTo.Writer(_writer);
 
          _log = L.G<FormattingTest>();
       }

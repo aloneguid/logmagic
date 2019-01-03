@@ -36,11 +36,5 @@ namespace LogMagic.Writers
             Console.WriteLine(TextFormatter.Format(e, _format));
          }
       }
-
-      public Task WriteAsync(IEnumerable<LogEvent> events)
-      {
-         Write(events);
-         return Task.FromResult(true);
-      }
    }
 }
