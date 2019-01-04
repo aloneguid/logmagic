@@ -4,6 +4,7 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using NetBox.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
@@ -13,6 +14,14 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
       private readonly TelemetryClient _client;
       private readonly WriterOptions _options;
       private readonly TelemetryContext _context;
+
+      //properties that shouldn't be attached explicitly
+      private static readonly HashSet<string> _cleanupProperties = new HashSet<string>
+      {
+         KnownProperty.OperationId,
+         KnownProperty.ApplicationActivityId,
+         KnownProperty.ApplicationParentActivityId
+      };
 
       public InsightsContext(TelemetryClient client, WriterOptions options)
       {
@@ -49,21 +58,61 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          }
       }
 
+      private void ApplyRequest(LogEvent e)
+      {
+         string name = e.UseProperty<string>(KnownProperty.RequestName);
+         string uri = e.UseProperty<string>(KnownProperty.RequestUri);
+         string responseCode = GetHttpResponseCode(e);
+
+         var tr = new RequestTelemetry
+         {
+            Id = e.GetProperty<string>(KnownProperty.ApplicationActivityId),
+            Name = name,
+            Url = uri == null ? null : new Uri(uri),
+            Duration = TimeSpan.FromTicks(e.UseProperty<long>(KnownProperty.Duration)),
+            Success = e.ErrorException == null,
+            ResponseCode = responseCode,
+
+            //Source = 
+         };
+
+         Init(tr, e);
+
+         //override parent for this request
+         tr.Context.Operation.ParentId =
+            e.GetProperty<string>(KnownProperty.ApplicationParentActivityId)
+            ?? e.GetProperty<string>(KnownProperty.OperationId);  //in case parent activity is missing
+
+         _client.TrackRequest(tr);
+      }
+
       private void ApplyDependency(LogEvent e)
       {
          var d = new DependencyTelemetry()
          {
+            Id = e.GetProperty<string>(KnownProperty.ApplicationActivityId),
+
+            // "SQL", "Azure Table", "HTTP" etc.
             Type = e.UseProperty<string>(KnownProperty.DependencyType),
+
+            // generic name i.e. stored procedure name or URL _template_
             Name = e.UseProperty<string>(KnownProperty.DependencyName),
-            Data = e.UseProperty<string>(KnownProperty.DependencyCommand),
-            Target = e.UseProperty<string>(KnownProperty.DependencyTarget),
+
+            // actual command, i.e. sql statement or _full_ URL including all querty parameters
+            Data = e.UseProperty<string>(KnownProperty.DependencyData),
+
+            //Target = e.UseProperty<string>(KnownProperty.DependencyTarget),
+
             Duration = TimeSpan.FromTicks(e.UseProperty<long>(KnownProperty.Duration)),
             Success = e.ErrorException == null,
          };
-         string id = e.UseProperty<string>(KnownProperty.ActivityId);
-         if (id != null) d.Id = id;
-         AddProperties(d, e);
-         Add(d, e);
+
+         Init(d, e);
+
+         //override parent for this request
+         d.Context.Operation.ParentId =
+            e.GetProperty<string>(KnownProperty.ApplicationParentActivityId)
+            ?? e.GetProperty<string>(KnownProperty.OperationId);  //in case parent activity is missing
 
          _client.TrackDependency(d);
       }
@@ -74,8 +123,7 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          {
             Name = e.UseProperty<string>(KnownProperty.EventName)
          };
-         Add(t, e);
-         AddProperties(t, e);
+         Init(t, e);
 
          _client.TrackEvent(t);
       }
@@ -86,41 +134,19 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          {
             var et = new ExceptionTelemetry(e.ErrorException);
             et.Message = e.Message;
-            Add(et, e);
-            AddProperties(et, e);
+            et.Exception = e.ErrorException;
+
+            Init(et, e);
 
             _client.TrackException(et);
          }
          else
          {
             var tr = new TraceTelemetry(e.Message, GetSeverityLevel(e));
-            Add(tr, e);
-            AddProperties(tr, e);
+            Init(tr, e);
 
             _client.TrackTrace(tr);
          }
-      }
-
-      private void ApplyRequest(LogEvent e)
-      {
-         string name = e.UseProperty<string>(KnownProperty.RequestName);
-         string uri = e.UseProperty<string>(KnownProperty.RequestUri);
-         string responseCode = GetHttpResponseCode(e);
-
-         var tr = new RequestTelemetry
-         {
-            Name = name,
-            Url = uri == null ? null : new Uri(uri),
-            Duration = TimeSpan.FromTicks(e.UseProperty<long>(KnownProperty.Duration)),
-            Success = e.ErrorException == null,
-            ResponseCode = responseCode
-         };
-         string id = e.UseProperty<string>(KnownProperty.ActivityId);
-         if (id != null) tr.Id = id;
-         Add(tr, e);
-         AddProperties(tr, e);
-
-         _client.TrackRequest(tr);
       }
 
       private string GetHttpResponseCode(LogEvent e)
@@ -148,31 +174,37 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          var t = new MetricTelemetry();
          t.Name = e.UseProperty<string>(KnownProperty.MetricName);
          t.Sum = e.UseProperty<double>(KnownProperty.MetricValue);
-         Add(t, e);
-         AddProperties(t, e);
+
+         Init(t, e);
 
          _client.TrackMetric(t);
       }
 
-      private static void AddProperties(ISupportProperties telemetry, LogEvent e)
+      private static void Init<T>(T telemetry, LogEvent e) where T : ITelemetry, ISupportProperties
       {
-         telemetry.Properties.Add("loggerName", e.SourceName);
-
-         if (e.Properties == null) return;
-
-         telemetry.Properties.AddRange(e.Properties.ToDictionary(entry => entry.Key, entry => entry.Value?.ToString()));
-      }
-
-      private static void Add(ITelemetry telemetry, LogEvent e)
-      {
+         //ITelemetry
+         telemetry.Context.Operation.Id = e.GetProperty(KnownProperty.OperationId, string.Empty);
+         telemetry.Context.Operation.ParentId = e.GetProperty(KnownProperty.ApplicationActivityId, string.Empty);
          telemetry.Timestamp = e.EventTime;
+
+         //ISupportProperties
+         telemetry.Properties["source"] = e.SourceName;
+         if (e.Properties != null)
+         {
+            Dictionary<string, string> toAdd = e.Properties
+               .Where(p => !_cleanupProperties.Contains(p.Key))
+               .ToDictionary(p => p.Key, p => p.Value?.ToString());
+
+            if(toAdd.Count > 0)
+            {
+               telemetry.Properties.AddRange(toAdd);
+            }
+         }
       }
 
       private static SeverityLevel GetSeverityLevel(LogEvent e)
       {
-         LogSeverity sev = e.UseProperty(KnownProperty.Severity, LogSeverity.Information);
-
-         switch (sev)
+         switch (e.Severity)
          {
             case LogSeverity.Verbose:
                return SeverityLevel.Verbose;

@@ -40,83 +40,62 @@ namespace LogMagic.Console
             .WriteTo.Console()
             .WriteTo.PoshConsole()
             .WriteTo.AzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a", flushOnWrite: true)
-            .FilterBy.MinLogSeverity(LogSeverity.Verbose);
+            .FilterBy.MinLogSeverity(LogSeverity.Verbose)
+            .EnrichWith.Constant(KnownProperty.RoleName, "console app")
+            .EnrichWith.Constant(KnownProperty.RoleInstance, Guid.NewGuid().ToString());
 
-         log.Write("test1");
-
-         log.Write("dividing...",
-            "a", 5,
-            "b", 7);
-
-         log.Error("unexpected", new InvalidOperationException());
-
-         log.Error("test", new NullReferenceException());
-
-         using (log.Context("one", "two"))
+         //start global operation
+         using (log.Operation())
          {
-            log.Write("just a test");
+            //pretent we've got a global request
+            using (log.TrackIncomingRequest("launch"))
+            {
+               //basic logging
+               log.Write("simple write");
+
+               log.Write("dividing with parameters",
+                  "a", 5,
+                  "b", 7);
+
+               log.Error("unexpected", new InvalidOperationException());
+
+               using (log.Context("one", "two"))
+               {
+                  log.Write("properties in context");
+               }
+
+               log.Event("custom event");
+
+               //make a request to "twitter api"
+               using (log.TrackOutgoingRequest("Twitter", "getTweets", "getTweets?type=mine"))
+               {
+                  //pretend we are the twitter API and accept the request
+                  using (log.Context(
+                     KnownProperty.RoleName, "Twitter Server",
+                     KnownProperty.RoleInstance, Guid.NewGuid().ToString()))
+                  {
+                     using (log.TrackIncomingRequest("getTweets"))
+                     {
+                        log.Write("i've got those tweets!");
+                     }
+                  }
+               }
+
+               //make another request to twitter API
+               using (log.TrackOutgoingRequest("Twitter", "getTweets", "getTweets?type=everyoneElses"))
+               {
+
+               }
+
+               using (log.TrackOutgoingRequest("Twitter", "setTweets", "setTweets?count=" + DateTime.UtcNow.Millisecond))
+               {
+
+               }
+
+            }
          }
-
-         log.Event("my ev");
-
-         ApplicationMap();
 
          C.ReadKey();
-      }
-
-      private static void ApplicationMap()
-      {
-         using (log.Context(KnownProperty.OperationId, Guid.NewGuid().ToString()))
-         {
-            string webSiteActivityId = Guid.NewGuid().ToShortest();
-            string serverActivityId = Guid.NewGuid().ToShortest();
-
-            Exception ex = RandomGenerator.GetRandomInt(10) > 7 ? new Exception("simulated failure") : null;
-
-            //---- web site
-            using (log.Context(
-               KnownProperty.RoleName, "Web Site"))
-            {
-               log.TrackUnknownIncomingRequest("LogIn", RandomDurationMs(500, 600), ex);
-
-               log.Write("checking credentials on the server...");
-
-               using (log.Context(KnownProperty.ActivityId, webSiteActivityId))
-               {
-                  log.TrackOutgoingRequest(webSiteActivityId, "Server", "CheckCredential", 100, null);
-               }
-            }
-
-            //---- server
-            using (log.Context(
-               KnownProperty.RoleName, "Server",
-               KnownProperty.ParentActivityId, webSiteActivityId,
-               KnownProperty.ActivityId, serverActivityId))
-            {
-               log.TrackIncomingRequest(webSiteActivityId, serverActivityId, "CheckCredential", RandomDurationMs(400, 500), null);
-
-               log.Write("fetching user from DB...");
-
-               log.TrackOutgoingRequest(serverActivityId, "MSSQL", "GetUser", RandomDurationMs(100, 200), null);
-
-               if(ex != null)
-               {
-                  log.Write("failed to fetch user", ex);
-               }
-
-               log.Write("fetching user picture");
-
-               log.TrackOutgoingRequest(serverActivityId, "Blob Storage", "GetUserPicture", RandomDurationMs(100, 200), null);
-            }
-
-         }
-      }
-
-      private static long RandomDurationMs(int min, int max)
-      {
-         int ms = RandomGenerator.GetRandomInt(min, max);
-
-         return TimeSpan.FromMilliseconds(ms).Ticks;
       }
    }
 }

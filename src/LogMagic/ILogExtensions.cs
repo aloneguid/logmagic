@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NetBox.Extensions;
 
 namespace LogMagic
 {
@@ -77,6 +78,47 @@ namespace LogMagic
       }
 
       /// <summary>
+      /// todo
+      /// </summary>
+      public static IDisposable TrackIncomingRequest(this ILog log,
+         string requestName)
+      {
+         //request generates a new activity id, and pushes current activity id as it's parent
+
+         //generate a new ID for this activity and swap them
+         IDisposable context = log.Context(
+            KnownProperty.ApplicationParentActivityId, log.GetContextValue(KnownProperty.ApplicationActivityId),
+            KnownProperty.ApplicationActivityId, Guid.NewGuid().ToShortest());
+
+         log.Write(null,
+            KnownProperty.RequestName, requestName);
+
+         return context;
+      }
+
+      /// <summary>
+      /// todo
+      /// </summary>
+      public static IDisposable TrackOutgoingRequest(this ILog log,
+         string targetType,
+         string commandTemplate,
+         string fullCommand)
+      {
+         //generate a new ID for this activity and swap them
+         IDisposable context = log.Context(
+            KnownProperty.ApplicationParentActivityId, log.GetContextValue(KnownProperty.ApplicationActivityId),
+            KnownProperty.ApplicationActivityId, Guid.NewGuid().ToShortest());
+
+         log.Write(null, 
+            KnownProperty.DependencyType, targetType,
+            KnownProperty.DependencyName, commandTemplate,
+            KnownProperty.DependencyData, fullCommand);
+
+         return context;
+      }
+
+
+      /// <summary>
       /// 
       /// </summary>
       public static void TrackIncomingRequest(this ILog log,
@@ -90,8 +132,6 @@ namespace LogMagic
 
          ps[KnownProperty.RequestName] = incomingOperationName;
          ps[KnownProperty.Duration] = totalRequestDuration;
-         ps[KnownProperty.ActivityId] = activityId;
-         ps[KnownProperty.ParentActivityId] = callingActivityId;
 
          if (error != null)
          {
@@ -122,8 +162,13 @@ namespace LogMagic
          log.Write(null, ps);
       }
 
-
-#if !NET45
+      /// <summary>
+      /// Helper method to create a context of a new operation
+      /// </summary>
+      public static IDisposable Operation(this ILog log)
+      {
+         return log.Context(KnownProperty.OperationId, Guid.NewGuid().ToShortest());
+      }
 
       /// <summary>
       /// Creates a disposable logging context that enriches it with custom properties
@@ -151,8 +196,6 @@ namespace LogMagic
          return defaultValue;
       }
 
-#endif
-
       private static IDictionary<string, object> ToDictionary(bool allowNullResult, params object[] properties)
       {
          if ((properties == null || properties.Length == 0) && allowNullResult) return null;
@@ -165,7 +208,12 @@ namespace LogMagic
             object keyObj = properties[i];
             if (!(keyObj is string key)) throw new ArgumentOutOfRangeException($"{nameof(properties)}[{i}]", "parameter must be of string type as it's meant to be a parameter name");
 
-            d[key] = properties[i + 1];
+            //don't add props with null values
+            object value = properties[i + 1];
+            if (value != null)
+            {
+               d[key] = value;
+            }
          }
 
          return d;

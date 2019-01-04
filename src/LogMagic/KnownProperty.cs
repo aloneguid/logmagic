@@ -52,15 +52,16 @@ namespace LogMagic
       /// </summary>
       public const string OperationId = "operationId";
 
-      /// <summary>
-      /// If current activity is initiated by another one, indicates the parent activity ID.
-      /// </summary>
-      public const string ParentActivityId = "parentActivityId";
 
       /// <summary>
-      /// Used to override the ID set by a telemetry call
+      /// todo
       /// </summary>
-      public const string ActivityId = "activityId";
+      public const string ApplicationActivityId = "appActivityId";
+
+      /// <summary>
+      /// todo
+      /// </summary>
+      public const string ApplicationParentActivityId = "appParentActivityId";
 
       /// <summary>
       /// Operation duration, has to be <see cref="Int64"/>
@@ -96,6 +97,11 @@ namespace LogMagic
       /// Dependency name
       /// </summary>
       public const string DependencyName = "dependencyName";
+
+      /// <summary>
+      /// Dependency data
+      /// </summary>
+      public const string DependencyData = "dependencyData";
 
       /// <summary>
       /// Dependency type

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
    <PropertyGroup>
-      <TargetFrameworks>netstandard2.0;net45;net46</TargetFrameworks>
+      <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
       <Description>Provides loggic facilities for Microsoft Azure Application Insights.</Description>
       <Copyright>Copyright (c) 2015-2018 by Ivan Gavryliuk</Copyright>
       <PackageProjectUrl>https://github.com/aloneguid/config</PackageProjectUrl>
@@ -22,9 +22,6 @@
    <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
       <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
    </PropertyGroup>
-   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
-      <DefineConstants>$(DefineConstants);NETFULL;NET45</DefineConstants>
-   </PropertyGroup>
    <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
       <DefineConstants>$(DefineConstants);NETFULL</DefineConstants>
    </PropertyGroup>
@@ -32,8 +29,5 @@
       <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
       <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.8.1" />
       <ProjectReference Include="..\LogMagic\LogMagic.csproj" />
-   </ItemGroup>
-   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-      
    </ItemGroup>
 </Project>

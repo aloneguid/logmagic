@@ -52,8 +52,8 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
 
          using (var time = new TimeMeasure())
          {
-            using (_log.Context(KnownProperty.ActivityId, dependencyId))   //dependency ID travels to the server as parent Id
-            {
+            //using (_log.Context(KnownProperty.ActivityId, dependencyId))   //dependency ID travels to the server as parent Id
+            //{
                Exception gex = null;
                _enricher.Enrich(requestMessage);
 
@@ -79,7 +79,7 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
                   //ActivityId is overriden by context
                   _log.TrackOutgoingRequest(dependencyId, _remoteServiceName, methodName, time.ElapsedTicks, gex);
                }
-            }
+            //}
          }
       }
 

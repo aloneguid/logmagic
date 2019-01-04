@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6;net46</TargetFrameworks>
     <AssemblyOriginatorKeyFile>../../logmagic.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
@@ -17,12 +17,6 @@
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <Description>Integrates LogMagic with Storage.Net</Description>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.6|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.6\LogMagic.Storage.Net.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.6\LogMagic.Storage.Net.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Storage.Net">

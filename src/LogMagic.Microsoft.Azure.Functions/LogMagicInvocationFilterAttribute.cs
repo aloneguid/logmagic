@@ -84,7 +84,7 @@ namespace Microsoft.Azure.WebJobs
                result[key] = value;
             }
 
-            result[KnownProperty.ParentActivityId] = rootActivity.ParentId;
+            //result[KnownProperty.ParentActivityId] = rootActivity.ParentId;
          }
 
          return result;

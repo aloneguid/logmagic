@@ -111,11 +111,11 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
             e => e.Value == null ? null : Enc.GetString(e.Value));
 
          // ActivityId becomes parent here
-         if(result.TryGetValue(KnownProperty.ActivityId, out string activityId))
+         /*if(result.TryGetValue(KnownProperty.ActivityId, out string activityId))
          {
             result[KnownProperty.ParentActivityId] = activityId;
             result.Remove(KnownProperty.ActivityId);
-         }
+         }*/
 
          return result;
       }
