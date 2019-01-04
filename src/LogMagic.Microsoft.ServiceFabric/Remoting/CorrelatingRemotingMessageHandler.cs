@@ -83,8 +83,9 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
                      _raiseSummary(summary);
                   }
 
-                  _log.Request(methodName, time.ElapsedTicks, gex,
-                     context.ToDictionary(k => k.Key, v => (object)(v.Value)));
+                  //todo: slightly broken
+                  //_log.TrackIncomingRequest(methodName, time.ElapsedTicks, gex,
+                  //   context.ToDictionary(k => k.Key, v => (object)(v.Value)));
                }
             }
          }

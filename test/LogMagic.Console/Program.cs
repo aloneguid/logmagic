@@ -56,6 +56,8 @@ namespace LogMagic.Console
             log.Write("just a test");
          }
 
+         log.Event("my ev");
+
          C.ReadKey();
 
          /*while (true)
@@ -88,8 +90,7 @@ namespace LogMagic.Console
                log.Event("Create Finished",
                   "Objects Created", maxObjects);
 
-               log.Request("Create Objects", time.ElapsedTicks, null,
-                  "Objects Created", maxObjects);
+               log.TrackUnknownIncomingRequest("Create Objects", time.ElapsedTicks, null);
             }
          }
       }
@@ -107,13 +108,13 @@ namespace LogMagic.Console
             using (log.Context(
                KnownProperty.RoleName, "Web Site"))
             {
-               log.Request("LogIn", RandomDurationMs(500, 600), ex);
+               log.TrackUnknownIncomingRequest("LogIn", RandomDurationMs(500, 600), ex);
 
                log.Write("checking credentials on the server...");
 
                using (log.Context(KnownProperty.ActivityId, webSiteActivityId))
                {
-                  log.Dependency("Server", "Server", "CheckCredential", 100);
+                  log.TrackOutgoingRequest(webSiteActivityId, "Server", "CheckCredential", 100, null);
                }
             }
 
@@ -123,11 +124,11 @@ namespace LogMagic.Console
                KnownProperty.ParentActivityId, webSiteActivityId,
                KnownProperty.ActivityId, serverActivityId))
             {
-               log.Request("CheckCredential", RandomDurationMs(400, 500));
+               log.TrackIncomingRequest(webSiteActivityId, serverActivityId, "CheckCredential", RandomDurationMs(400, 500), null);
 
                log.Write("fetching user from DB...");
 
-               log.Dependency("Databases", "MSSQL", "GetUser", RandomDurationMs(100, 200), ex);
+               log.TrackOutgoingRequest(serverActivityId, "MSSQL", "GetUser", RandomDurationMs(100, 200), null);
 
                if(ex != null)
                {
@@ -136,7 +137,7 @@ namespace LogMagic.Console
 
                log.Write("fetching user picture");
 
-               log.Dependency("Blob Storage", "Primary", "GetUserPicture", RandomDurationMs(100, 200));
+               log.TrackOutgoingRequest(serverActivityId, "Blob Storage", "GetUserPicture", RandomDurationMs(100, 200), null);
             }
 
          }

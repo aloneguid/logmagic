@@ -52,7 +52,7 @@ namespace LogMagic.Microsoft.AspNetCore
                      KnownProperty.RequestUri, uri,
                      KnownProperty.ResponseCode, responseCode))
                   {
-                     log.Request(name, time.ElapsedTicks, gex);
+                     log.TrackUnknownIncomingRequest(name, time.ElapsedTicks, gex);
                   }
                }
             }

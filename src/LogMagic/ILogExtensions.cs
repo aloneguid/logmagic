@@ -35,6 +35,74 @@ namespace LogMagic
          log.Write(message, ps);
       }
 
+      /// <summary>
+      /// Track event
+      /// </summary>
+      public static void Event(this ILog log, string name, params object[] parameters)
+      {
+         IDictionary<string, object> ps = ToDictionary(false, parameters);
+         ps[KnownProperty.EventName] = name;
+
+         log.Write(null, ps);
+      }
+
+      /// <summary>
+      /// Report metric
+      /// </summary>
+      public static void Metric(this ILog log, string name, double value)
+      {
+         log.Write(null,
+            KnownProperty.MetricName, name,
+            KnownProperty.MetricValue, value);
+      }
+
+      /// <summary>
+      /// Track request that comes from an unknown source
+      /// </summary>
+      public static void TrackUnknownIncomingRequest(this ILog log,
+         string requestName, long requestDuration,
+         Exception error = null)
+      {
+         IDictionary<string, object> ps = new Dictionary<string, object>();
+
+         ps[KnownProperty.RequestName] = requestName;
+         ps[KnownProperty.Duration] = requestDuration;
+
+         if(error != null)
+         {
+            ps[KnownProperty.Error] = error;
+         }
+
+         log.Write(null, ps);
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public static void TrackIncomingRequest(this ILog log,
+         string callingActivityId,
+         string activityId,
+         string incomingOperationName,
+         long totalRequestDuration,
+         Exception error)
+      {
+
+      }
+
+      /// <summary>
+      /// Tracks outgoing request. This call needs to be made when your client has called a remote component that needs to be tracked.
+      /// </summary>
+      public static void TrackOutgoingRequest(this ILog log,
+         string activityId,
+         string remoteComponentName,
+         string remoteOperationName,
+         long outgoingRequestDurationMs,
+         Exception error)
+      {
+
+      }
+
+
 #if !NET45
 
       /// <summary>
@@ -64,57 +132,6 @@ namespace LogMagic
       }
 
 #endif
-
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="log"></param>
-      /// <param name="name"></param>
-      /// <param name="value"></param>
-      public static void Metric(this ILog log, string name, double value)
-      {
-         log.Write(null,
-            KnownProperty.MetricName, name,
-            KnownProperty.MetricValue, value);
-      }
-
-      //-------------------------- old code
-
-      /// <summary>
-      /// Track dependency
-      /// </summary>
-      public static void Dependency(this ILog log, string type, string name, string command, long duration,
-         Exception error = null,
-         params object[] properties)
-      {
-         log.Dependency(type, name, command, duration, error, ToDictionary(true, properties));
-      }
-
-      /// <summary>
-      /// Track dependency
-      /// </summary>
-      public static void Dependency(this ILog log, string name, string command, long duration,
-         Exception error,
-         params object[] properties)
-      {
-         log.Dependency(name, name, command, duration, error, ToDictionary(true, properties));
-      }
-
-      /// <summary>
-      /// Track request
-      /// </summary>
-      public static void Request(this ILog log, string name, long duration, Exception error = null, params object[] properties)
-      {
-         log.Request(name, duration, error, ToDictionary(true, properties));
-      }
-
-      /// <summary>
-      /// Track event
-      /// </summary>
-      public static void Event(this ILog log, string name, params object[] properties)
-      {
-         log.Event(name, ToDictionary(true, properties));
-      }
 
       private static IDictionary<string, object> ToDictionary(bool allowNullResult, params object[] properties)
       {
