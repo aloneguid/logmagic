@@ -82,21 +82,10 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
 
       private void ApplyTrace(LogEvent e)
       {
-         var tr = new TraceTelemetry(e.Message, GetSeverityLevel(e));
-         Add(tr, e);
-         AddProperties(tr, e);
-
-
-         if (e.ErrorException != null)
+         if(e.ErrorException != null)
          {
-            if(_options.TraceExceptions)
-            {
-               _client.TrackTrace(tr);
-            }
-
             var et = new ExceptionTelemetry(e.ErrorException);
             et.Message = e.Message;
-
             Add(et, e);
             AddProperties(et, e);
 
@@ -104,6 +93,10 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
          }
          else
          {
+            var tr = new TraceTelemetry(e.Message, GetSeverityLevel(e));
+            Add(tr, e);
+            AddProperties(tr, e);
+
             _client.TrackTrace(tr);
          }
       }

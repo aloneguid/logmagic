@@ -39,6 +39,7 @@ namespace LogMagic.Console
             .WriteTo.Trace()
             .WriteTo.Console()
             .WriteTo.PoshConsole()
+            .WriteTo.AzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a", flushOnWrite: true)
             .FilterBy.MinLogSeverity(LogSeverity.Verbose);
 
          log.Write("test1");
@@ -58,41 +59,9 @@ namespace LogMagic.Console
 
          log.Event("my ev");
 
+         ApplicationMap();
+
          C.ReadKey();
-
-         /*while (true)
-         {
-            //Basics(5);
-
-            ApplicationMap();
-
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-         }*/
-      }
-
-      private static void Basics(int maxObjects)
-      {
-         using (log.Context(
-            "Scenario", "Basics",
-            KnownProperty.OperationId, Guid.NewGuid().ToString()))
-         {
-            using (var time = new TimeMeasure())
-            {
-               log.Event("Create Started");
-
-               for (int i = 0; i < maxObjects; i++)
-               {
-                  log.Write("creating object {0}", i);
-
-                  log.Metric("Process Working Set", Environment.WorkingSet);
-               }
-
-               log.Event("Create Finished",
-                  "Objects Created", maxObjects);
-
-               log.TrackUnknownIncomingRequest("Create Objects", time.ElapsedTicks, null);
-            }
-         }
       }
 
       private static void ApplicationMap()

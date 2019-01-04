@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace LogMagic
 {
    /// <summary>
-   /// Utility class to server log clients
+   /// Utility class to serve log clients
    /// </summary>
    class LogClient : ILog
    {
@@ -90,66 +90,6 @@ namespace LogMagic
             }
          }
       }
-
-
-      /*[MethodImpl(MethodImplOptions.NoInlining)]
-      public void Dependency(string type, string name, string command, long duration, Exception error, Dictionary<string, object> properties)
-      {
-         if (properties == null) properties = new Dictionary<string, object>();
-
-         properties[KnownProperty.Duration] = duration;
-         properties[KnownProperty.DependencyName] = name;
-         properties[KnownProperty.DependencyType] = type;
-         properties[KnownProperty.DependencyCommand] = command;
-
-         var parameters = new List<object> { _name, command, TimeSpan.FromTicks(duration) };
-         if (error != null) parameters.Add(error);
-
-         Serve(EventType.Dependency, properties,
-            "dependency {0}.{1} took {2}",
-            parameters.ToArray());
-      }
-
-      [MethodImpl(MethodImplOptions.NoInlining)]
-      public void Event(string name, Dictionary<string, object> properties)
-      {
-         if (properties == null) properties = new Dictionary<string, object>();
-         properties[KnownProperty.EventName] = name;
-
-         Serve(EventType.ApplicationEvent, properties,
-            "application event {0} occurred",
-            name);
-      }
-
-      [MethodImpl(MethodImplOptions.NoInlining)]
-      public void Request(string name, long duration, Exception error, Dictionary<string, object> properties)
-      {
-         if (properties == null) properties = new Dictionary<string, object>();
-         properties[KnownProperty.Duration] = duration;
-         properties[KnownProperty.RequestName] = name;
-
-         if (error != null)
-         {
-            properties[KnownProperty.Error] = error;
-         }
-
-         Serve(EventType.HandledRequest, properties,
-            "request {0} took {1}", name, TimeSpan.FromTicks(duration));
-      }
-
-      [MethodImpl(MethodImplOptions.NoInlining)]
-      public void Metric(string name, double value, Dictionary<string, object> properties)
-      {
-         if (properties == null) properties = new Dictionary<string, object>();
-
-         properties[KnownProperty.MetricName] = name;
-         properties[KnownProperty.MetricValue] = value;
-
-         Serve(EventType.Metric, properties,
-            "metric {0} == {1}",
-            name, value);
-      }
-      */
 
       public override string ToString()
       {

@@ -12,12 +12,6 @@
       public bool FlushOnWrite { get; set; } = false;
 
       /// <summary>
-      /// When ON (default) exceptions will be send both as traces and exceptions at the same time.
-      /// When OFF exceptions will not be sent to traces.
-      /// </summary>
-      public bool TraceExceptions { get; set; } = true;
-
-      /// <summary>
       /// Enables Live Stream (AKA QuickPulse). ON by default.
       /// </summary>
       public bool EnableQuickPulse { get; set; } = true;

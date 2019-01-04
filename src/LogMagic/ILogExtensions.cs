@@ -86,7 +86,19 @@ namespace LogMagic
          long totalRequestDuration,
          Exception error)
       {
+         IDictionary<string, object> ps = new Dictionary<string, object>();
 
+         ps[KnownProperty.RequestName] = incomingOperationName;
+         ps[KnownProperty.Duration] = totalRequestDuration;
+         ps[KnownProperty.ActivityId] = activityId;
+         ps[KnownProperty.ParentActivityId] = callingActivityId;
+
+         if (error != null)
+         {
+            ps[KnownProperty.Error] = error;
+         }
+
+         log.Write(null, ps);
       }
 
       /// <summary>
@@ -99,7 +111,15 @@ namespace LogMagic
          long outgoingRequestDurationMs,
          Exception error)
       {
+         var ps = new Dictionary<string, object>();
+         ps[KnownProperty.DependencyType] = remoteComponentName;
+         ps[KnownProperty.DependencyName] = remoteComponentName;
+         ps[KnownProperty.DependencyCommand] = remoteOperationName;
+         ps[KnownProperty.Duration] = outgoingRequestDurationMs;
 
+         if (error != null) ps[KnownProperty.Error] = error;
+
+         log.Write(null, ps);
       }
 
 
