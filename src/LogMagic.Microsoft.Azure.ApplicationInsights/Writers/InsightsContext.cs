@@ -62,7 +62,7 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
       {
          string name = e.UseProperty<string>(KnownProperty.RequestName);
          string uri = e.UseProperty<string>(KnownProperty.RequestUri);
-         string responseCode = GetHttpResponseCode(e);
+         string responseCode = e.UseProperty<string>(KnownProperty.ResponseCode) ?? GetHttpResponseCode(e);
 
          var tr = new RequestTelemetry
          {

@@ -58,26 +58,6 @@ namespace LogMagic
       }
 
       /// <summary>
-      /// Track request that comes from an unknown source
-      /// </summary>
-      public static void TrackUnknownIncomingRequest(this ILog log,
-         string requestName, long requestDuration,
-         Exception error = null)
-      {
-         IDictionary<string, object> ps = new Dictionary<string, object>();
-
-         ps[KnownProperty.RequestName] = requestName;
-         ps[KnownProperty.Duration] = requestDuration;
-
-         if(error != null)
-         {
-            ps[KnownProperty.Error] = error;
-         }
-
-         log.Write(null, ps);
-      }
-
-      /// <summary>
       /// todo
       /// </summary>
       public static IDisposable TrackIncomingRequest(this ILog log,
@@ -115,52 +95,6 @@ namespace LogMagic
             KnownProperty.DependencyData, fullCommand);
 
          return context;
-      }
-
-
-      /// <summary>
-      /// 
-      /// </summary>
-      [Obsolete]
-      public static void TrackIncomingRequest(this ILog log,
-         string callingActivityId,
-         string activityId,
-         string incomingOperationName,
-         long totalRequestDuration,
-         Exception error)
-      {
-         IDictionary<string, object> ps = new Dictionary<string, object>();
-
-         ps[KnownProperty.RequestName] = incomingOperationName;
-         ps[KnownProperty.Duration] = totalRequestDuration;
-
-         if (error != null)
-         {
-            ps[KnownProperty.Error] = error;
-         }
-
-         log.Write(null, ps);
-      }
-
-      /// <summary>
-      /// Tracks outgoing request. This call needs to be made when your client has called a remote component that needs to be tracked.
-      /// </summary>
-      public static void TrackOutgoingRequest(this ILog log,
-         string activityId,
-         string remoteComponentName,
-         string remoteOperationName,
-         long outgoingRequestDurationMs,
-         Exception error)
-      {
-         var ps = new Dictionary<string, object>();
-         ps[KnownProperty.DependencyType] = remoteComponentName;
-         ps[KnownProperty.DependencyName] = remoteComponentName;
-         ps[KnownProperty.DependencyCommand] = remoteOperationName;
-         ps[KnownProperty.Duration] = outgoingRequestDurationMs;
-
-         if (error != null) ps[KnownProperty.Error] = error;
-
-         log.Write(null, ps);
       }
 
       /// <summary>

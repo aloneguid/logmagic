@@ -24,7 +24,7 @@
     <Description>Provides integration with ASP.NET Core for LogMagic.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.1" />
   </ItemGroup>
   <ItemGroup>

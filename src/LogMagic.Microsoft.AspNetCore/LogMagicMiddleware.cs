@@ -17,18 +17,19 @@ namespace LogMagic.Microsoft.AspNetCore
       {
          _next = next;
       }
-      
+
       public async Task Invoke(HttpContext context)
       {
          string name = $"{context.Request.Method} {context.Request.Path}{context.Request.QueryString}";
          string uri = $"{context.Request.Scheme}://{context.Request.Host}{context.Request.Path}{context.Request.QueryString}";
 
-         //parent activity ID is returned here
-         Dictionary<string, string> correlationContext = GetIncomingContext();
+         GetActivityIds(out string activityId, out string parentActivityId);
 
-         //everything happening inside this request will have a proper operation id and
-         //parent activity id set from correlation context
-         using (log.Context(correlationContext))
+         using (log.Context(
+            KnownProperty.RequestName, name,
+            KnownProperty.RequestUri, uri,
+            KnownProperty.ApplicationActivityId, activityId,
+            KnownProperty.ApplicationParentActivityId, parentActivityId))
          {
             using (var time = new TimeMeasure())
             {
@@ -47,13 +48,9 @@ namespace LogMagic.Microsoft.AspNetCore
                {
                   string responseCode = context.Response.StatusCode.ToString();
 
-                  // request will have a new ID but parentId is fetched from current context which links it appropriately
-                  using (log.Context(
-                     KnownProperty.RequestUri, uri,
-                     KnownProperty.ResponseCode, responseCode))
-                  {
-                     log.TrackUnknownIncomingRequest(name, time.ElapsedTicks, gex);
-                  }
+                  log.Write(null,
+                     KnownProperty.Duration, time.ElapsedTicks,
+                     KnownProperty.ResponseCode, responseCode);
                }
             }
          }
@@ -64,13 +61,11 @@ namespace LogMagic.Microsoft.AspNetCore
          var result = new Dictionary<string, string>();
 
          //get root activity which is the one that initiated incoming call
-         Activity rootActivity = Activity.Current;
-         if (rootActivity != null)
+         Activity activity = Activity.Current;
+         if (activity != null)
          {
-            while (rootActivity.Parent != null) rootActivity = rootActivity.Parent;
-
             //add properties which are stored in baggage
-            foreach (KeyValuePair<string, string> baggageItem in rootActivity.Baggage)
+            foreach (KeyValuePair<string, string> baggageItem in activity.Baggage)
             {
                string key = baggageItem.Key;
                string value = baggageItem.Value;
@@ -78,10 +73,29 @@ namespace LogMagic.Microsoft.AspNetCore
                result[key] = value;
             }
 
-            //result[KnownProperty.ParentActivityId] = rootActivity.ParentId;
+            //ASP.NET uses Activity and pre-populates it with IDs, we can use them
+            string activityId = activity.Id;
+            string parentActivityId = activity.Parent?.Id;
+
+            result[KnownProperty.ApplicationActivityId] = activityId;
+            result[KnownProperty.ApplicationParentActivityId] = parentActivityId;
          }
 
          return result;
+      }
+
+      private void GetActivityIds(out string activityId, out string parentActivityId)
+      {
+         Activity activity = Activity.Current;
+         if(activity == null)
+         {
+            activityId = parentActivityId = null;
+            return;
+         }
+
+
+         activityId = activity.Id;
+         parentActivityId = activity.ParentId;
       }
    }
 }

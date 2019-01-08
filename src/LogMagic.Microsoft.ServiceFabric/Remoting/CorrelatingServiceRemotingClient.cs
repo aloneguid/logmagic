@@ -77,7 +77,7 @@ namespace LogMagic.Microsoft.ServiceFabric.Remoting
                   }
 
                   //ActivityId is overriden by context
-                  _log.TrackOutgoingRequest(dependencyId, _remoteServiceName, methodName, time.ElapsedTicks, gex);
+                  //_log.TrackOutgoingRequest(dependencyId, _remoteServiceName, methodName, time.ElapsedTicks, gex);
                }
             //}
          }

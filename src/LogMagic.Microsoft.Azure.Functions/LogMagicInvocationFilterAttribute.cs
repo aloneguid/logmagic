@@ -50,7 +50,7 @@ namespace Microsoft.Azure.WebJobs
                   {
                      if (LogRequests)
                      {
-                        log.TrackUnknownIncomingRequest(executingContext.FunctionName, time.ElapsedTicks, gex);
+                        //log.TrackUnknownIncomingRequest(executingContext.FunctionName, time.ElapsedTicks, gex);
                      }
                   }
 
