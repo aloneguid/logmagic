@@ -121,6 +121,7 @@ namespace LogMagic
       /// <summary>
       /// 
       /// </summary>
+      [Obsolete]
       public static void TrackIncomingRequest(this ILog log,
          string callingActivityId,
          string activityId,

@@ -1,12 +1,4 @@
-﻿using LogMagic.Enrichers;
-using LogMagic.Microsoft.Azure.ApplicationInsights;
-using NetBox.Extensions;
-using NetBox.Generator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
 using C = System.Console;
 
 namespace LogMagic.Console

@@ -19,7 +19,8 @@ namespace LogMagic.WebApiApp
          Configuration = configuration;
 
          L.Config
-            .WriteTo.Trace();
+            .WriteTo.Trace()
+            .WriteTo.AzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a");
       }
 
       public IConfiguration Configuration { get; }
@@ -33,7 +34,7 @@ namespace LogMagic.WebApiApp
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
       public void Configure(IApplicationBuilder app, IHostingEnvironment env)
       {
-         app.UseLogMagic();
+         app.UseLogMagic("LogMagicWebApi", "1");
 
          if (env.IsDevelopment())
          {

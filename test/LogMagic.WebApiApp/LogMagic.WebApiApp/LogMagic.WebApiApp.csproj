@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\LogMagic.Microsoft.AspNetCore\LogMagic.Microsoft.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\src\LogMagic.Microsoft.Azure.ApplicationInsights\LogMagic.Microsoft.Azure.ApplicationInsights.csproj" />
     <ProjectReference Include="..\..\..\src\LogMagic\LogMagic.csproj" />
   </ItemGroup>
 

@@ -22,7 +22,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 }
 ```
 
-> Make sure to call the UseElmahIo-method after installation of other pieces of middleware handling exceptions (like UseDeveloperExceptionPage and UseExceptionHandler), but before any calls to UseStaticFiles, UseMvc and similar.
+> Make sure to call this method after installation of other pieces of middleware handling exceptions (like UseDeveloperExceptionPage and UseExceptionHandler), but before any calls to UseStaticFiles, UseMvc and similar.
 
 ## What does it do
 

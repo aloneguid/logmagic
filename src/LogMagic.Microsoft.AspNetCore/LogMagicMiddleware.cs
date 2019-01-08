@@ -83,29 +83,5 @@ namespace LogMagic.Microsoft.AspNetCore
 
          return result;
       }
-
-      /*private bool TryGetFromAppInsightsContext(HttpContext context, out string operationId, out string operationParentId, out string telemetryId)
-      {
-         RequestTelemetry appInsightsTelemetry = context.Features.Get<RequestTelemetry>();
-
-         if (appInsightsTelemetry != null)
-         {
-            if(!_appInsightsInitialised)
-            {
-               string roleName = appInsightsTelemetry.Context.Cloud?.RoleName;
-               string roleInstance = appInsightsTelemetry.Context.Cloud?.RoleInstance;
-
-               if (roleName != null) L.Config.EnrichWith.Constant(KnownProperty.RoleName, roleName);
-               if (roleInstance != null) L.Config.EnrichWith.Constant(KnownProperty.RoleInstance, roleInstance);
-
-               _appInsightsInitialised = true;
-            }
-
-            return appInsightsTelemetry.Context.Operation.Id;
-         }
-
-         return false;
-      }*/
-
    }
 }
