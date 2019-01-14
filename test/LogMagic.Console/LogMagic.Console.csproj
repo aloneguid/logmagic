@@ -11,8 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LogMagic.Microsoft.Azure.ApplicationInsights\LogMagic.Microsoft.Azure.ApplicationInsights.csproj" />
-    <ProjectReference Include="..\..\src\LogMagic.Microsoft.Windows.Speech\LogMagic.Microsoft.Windows.Speech.csproj" />
-    <ProjectReference Include="..\..\src\LogMagic.Proxy\LogMagic.Proxy.csproj" />
     <ProjectReference Include="..\..\src\LogMagic\LogMagic.csproj" />
   </ItemGroup>
 </Project>

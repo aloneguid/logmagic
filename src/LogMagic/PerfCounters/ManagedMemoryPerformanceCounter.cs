@@ -1,5 +1,4 @@
-﻿#if !(NETSTANDARD14 || NETSTANDARD16)
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,4 +14,3 @@ namespace LogMagic.PerfCounters
       }
    }
 }
-#endif

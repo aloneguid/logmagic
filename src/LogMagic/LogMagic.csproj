@@ -3,7 +3,7 @@
       <Copyright>Copyright (c) 2015-2018 by Ivan Gavryliuk</Copyright>
       <AssemblyTitle>LogMagic</AssemblyTitle>
       <Authors>Ivan Gavryliuk (@aloneguid)</Authors>
-      <TargetFrameworks>netstandard1.4;netstandard1.6;netstandard2.0;net46</TargetFrameworks>
+      <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
       <GenerateDocumentationFile>true</GenerateDocumentationFile>
       <AssemblyName>LogMagic</AssemblyName>
       <AssemblyOriginatorKeyFile>../../logmagic.snk</AssemblyOriginatorKeyFile>
@@ -31,25 +31,14 @@
       <WarningsAsErrors />
    </PropertyGroup>
    <ItemGroup>
+      <PackageReference Include="Castle.Core" Version="4.3.1" />
       <PackageReference Include="netbox" Version="2.1.5" />
    </ItemGroup>
-   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' Or '$(TargetFramework)' == 'netstandard1.6' ">
-      <PackageReference Include="System.Diagnostics.StackTrace" Version="4.3.0" />
-      <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
-      <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
-      <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-   </ItemGroup>
-   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
-      <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD14</DefineConstants>
-   </PropertyGroup>
-   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-      <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD16</DefineConstants>
-   </PropertyGroup>
    <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-      <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD20;WINPERF</DefineConstants>
+      <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
    </PropertyGroup>
    <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
-      <DefineConstants>$(DefineConstants);NETFULL;NET46;WINPERF</DefineConstants>
+      <DefineConstants>$(DefineConstants);NETDESKTOP</DefineConstants>
    </PropertyGroup>
    <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46' ">
       <Reference Include="System.Net.Http" />
@@ -58,8 +47,5 @@
    </ItemGroup>
    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
       <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.5.0" />
-   </ItemGroup>
-   <ItemGroup>
-      <DotNetCliToolReference Include="dotnet-housework" Version="0.0.7" />
    </ItemGroup>
 </Project>

@@ -55,13 +55,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogMagic.Microsoft.Extensio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogMagic.Microsoft.AspNetCore", "src\LogMagic.Microsoft.AspNetCore\LogMagic.Microsoft.AspNetCore.csproj", "{33F2EE47-C8AC-4505-ADFD-F335045C5BD0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogMagic.Proxy", "src\LogMagic.Proxy\LogMagic.Proxy.csproj", "{00633190-30A0-445C-A905-211FE3ABF254}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogMagic.Microsoft.ServiceFabric", "src\LogMagic.Microsoft.ServiceFabric\LogMagic.Microsoft.ServiceFabric.csproj", "{AFA25145-D43F-49DD-B409-38753FB9A4A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogMagic.Microsoft.Azure.Functions", "src\LogMagic.Microsoft.Azure.Functions\LogMagic.Microsoft.Azure.Functions.csproj", "{F50970EF-6036-41CA-9602-0623D09DDF6F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogMagic.Microsoft.Windows.Speech", "src\LogMagic.Microsoft.Windows.Speech\LogMagic.Microsoft.Windows.Speech.csproj", "{838D981B-EA51-4977-B335-08D5B60CCBF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,10 +93,6 @@ Global
 		{33F2EE47-C8AC-4505-ADFD-F335045C5BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33F2EE47-C8AC-4505-ADFD-F335045C5BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33F2EE47-C8AC-4505-ADFD-F335045C5BD0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00633190-30A0-445C-A905-211FE3ABF254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00633190-30A0-445C-A905-211FE3ABF254}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00633190-30A0-445C-A905-211FE3ABF254}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00633190-30A0-445C-A905-211FE3ABF254}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFA25145-D43F-49DD-B409-38753FB9A4A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFA25145-D43F-49DD-B409-38753FB9A4A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFA25145-D43F-49DD-B409-38753FB9A4A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,10 +101,6 @@ Global
 		{F50970EF-6036-41CA-9602-0623D09DDF6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F50970EF-6036-41CA-9602-0623D09DDF6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F50970EF-6036-41CA-9602-0623D09DDF6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{838D981B-EA51-4977-B335-08D5B60CCBF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{838D981B-EA51-4977-B335-08D5B60CCBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{838D981B-EA51-4977-B335-08D5B60CCBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{838D981B-EA51-4977-B335-08D5B60CCBF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,10 +115,8 @@ Global
 		{93004547-82CD-472A-AD2F-B718810B64B9} = {42816ED5-2E52-4DBE-980A-9034B21B228D}
 		{7CD391EA-C41A-4A71-B87C-C6F254FEE3D3} = {0D2BC941-7E3A-4A1A-B5DA-A7F3AB32C785}
 		{33F2EE47-C8AC-4505-ADFD-F335045C5BD0} = {0D2BC941-7E3A-4A1A-B5DA-A7F3AB32C785}
-		{00633190-30A0-445C-A905-211FE3ABF254} = {0D2BC941-7E3A-4A1A-B5DA-A7F3AB32C785}
 		{AFA25145-D43F-49DD-B409-38753FB9A4A1} = {0D2BC941-7E3A-4A1A-B5DA-A7F3AB32C785}
 		{F50970EF-6036-41CA-9602-0623D09DDF6F} = {0D2BC941-7E3A-4A1A-B5DA-A7F3AB32C785}
-		{838D981B-EA51-4977-B335-08D5B60CCBF6} = {0D2BC941-7E3A-4A1A-B5DA-A7F3AB32C785}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A9360B6-B177-4333-8D5A-3493AD9F3B55}

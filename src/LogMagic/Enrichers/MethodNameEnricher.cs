@@ -1,5 +1,4 @@
-﻿#if !(NETSTANDARD14 || NETSTANDARD16)
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -44,4 +43,3 @@ namespace LogMagic.Enrichers
       }
    }
 }
-#endif

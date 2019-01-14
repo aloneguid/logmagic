@@ -1,5 +1,4 @@
-﻿#if WINPERF
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace LogMagic.PerfCounters.Windows
@@ -39,4 +38,3 @@ namespace LogMagic.PerfCounters.Windows
       }
    }
 }
-#endif

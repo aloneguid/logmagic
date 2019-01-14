@@ -7,13 +7,13 @@ namespace LogMagic.Proxy
    {
       private readonly ILog _log;
       private readonly bool _logExceptions;
-      private readonly OnBeforeExecution _onBeforeExecution;
-      private readonly OnAfterExecution _onAfterExecution;
+      private readonly OnBeforeMethodExecution _onBeforeExecution;
+      private readonly OnAfterMethodExecution _onAfterExecution;
 
       public LoggingInterceptor(ILog log,
          bool logExceptions,
-         OnBeforeExecution onBeforeExecution,
-         OnAfterExecution onAfterExecution)
+         OnBeforeMethodExecution onBeforeExecution,
+         OnAfterMethodExecution onAfterExecution)
       {
          _log = log;
          _logExceptions = logExceptions;

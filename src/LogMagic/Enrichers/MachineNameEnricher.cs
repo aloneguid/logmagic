@@ -1,5 +1,4 @@
-﻿#if !NETSTANDARD14
-using System;
+﻿using System;
 
 namespace LogMagic.Enrichers
 {
@@ -19,4 +18,3 @@ namespace LogMagic.Enrichers
       }
    }
 }
-#endif

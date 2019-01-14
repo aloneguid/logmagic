@@ -1,14 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Castle.DynamicProxy;
+using LogMagic.Proxy;
 using NetBox.Extensions;
 
 namespace LogMagic
 {
    /// <summary>
+   /// 
+   /// </summary>
+   public delegate void OnBeforeMethodExecution(ILog log, MethodInfo method, object[] arguments);
+
+   /// <summary>
+   /// 
+   /// </summary>
+   public delegate void OnAfterMethodExecution(ILog log, MethodInfo method, object[] argument, object returnValue, long ticks, Exception error);
+
+   /// <summary>
    /// Useful logging extensions
    /// </summary>
    public static class ILogExtensions
    {
+      private static ProxyGenerator _castleProxyGenerator = new ProxyGenerator();
+
       /// <summary>
       /// 
       /// </summary>
@@ -130,6 +145,35 @@ namespace LogMagic
          if (result is T) return (T)result;
          return defaultValue;
       }
+
+      #region [ Proxy Logging ]
+
+      /// <summary>
+      /// Creates a middle man proxy for a class that logs all the calls to this class. The class must implement an interface.
+      /// </summary>
+      /// <typeparam name="TInterface">Interface that this class implements</typeparam>
+      /// <typeparam name="TImplementation">Class intance</typeparam>
+      /// <param name="log"></param>
+      /// <param name="instance"></param>
+      /// <param name="logExceptions"></param>
+      /// <param name="onBeforeExecution"></param>
+      /// <param name="onAfterExecution"></param>
+      /// <returns></returns>
+      public static TInterface CreateInterfaceLogger<TInterface, TImplementation>(this ILog log, TImplementation instance,
+         bool logExceptions = true,
+         OnBeforeMethodExecution onBeforeExecution = null,
+         OnAfterMethodExecution onAfterExecution = null)
+         where TImplementation : TInterface
+      {
+         if (instance == null) throw new ArgumentNullException(nameof(instance));
+
+         var interceptor = new LoggingInterceptor(log, logExceptions, onBeforeExecution, onAfterExecution);
+
+         return (TInterface)_castleProxyGenerator.CreateInterfaceProxyWithTarget(typeof(TInterface), instance, interceptor);
+      }
+
+      #endregion
+
 
       private static IDictionary<string, object> ToDictionary(bool allowNullResult, params object[] properties)
       {

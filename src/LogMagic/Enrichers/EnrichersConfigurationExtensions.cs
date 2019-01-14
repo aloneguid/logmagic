@@ -25,7 +25,6 @@ namespace LogMagic
          return configuration.Enricher(new ConstantEnricher(propertyName, propertyValue));
       }
 
-#if NETFULL
       /// <summary>
       /// Enrich with caller's method name. This is using reflection on every log event therefore
       /// call with caution as it may cause serious performance issues in production.
@@ -34,9 +33,7 @@ namespace LogMagic
       {
          return configuration.Enricher(new MethodNameEnricher());
       }
-#endif
 
-#if !NETSTANDARD14
       /// <summary>
       /// Enrich with current machine name
       /// </summary>
@@ -44,7 +41,6 @@ namespace LogMagic
       {
          return configuration.Enricher(new MachineNameEnricher());
       }
-#endif
 
       /// <summary>
       /// Enrich by this machine's IP address

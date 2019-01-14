@@ -54,7 +54,6 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
             quickPulse.RegisterTelemetryProcessor(quickPulseProcessor);
          }
 
-#if NETFULL
          // see https://github.com/Microsoft/ApplicationInsights-dotnet-server/blob/develop/Src/PerformanceCollector/Perf.Shared/PerformanceCollectorModule.cs
          if (options.CollectPerformanceCounters)
          {
@@ -66,7 +65,6 @@ namespace LogMagic.Microsoft.Azure.ApplicationInsights.Writers
 
             pcm.Initialize(TelemetryConfiguration.Active);
          }
-#endif
 
          TelemetryConfiguration.Active.TelemetryInitializers.Add(new OperationTelemetryInitialiser());
 
