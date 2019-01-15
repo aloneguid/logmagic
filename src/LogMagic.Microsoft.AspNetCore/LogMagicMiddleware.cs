@@ -48,7 +48,8 @@ namespace LogMagic.Microsoft.AspNetCore
                {
                   string responseCode = context.Response.StatusCode.ToString();
 
-                  log.Write(null,
+                  log.Write(LogSeverity.Information,
+                     null,
                      KnownProperty.Duration, time.ElapsedTicks,
                      KnownProperty.ResponseCode, responseCode);
                }

@@ -23,6 +23,7 @@ namespace LogMagic.WebApiApp
               .UseStartup<Startup>()
               .ConfigureLogging(logging =>
               {
+                 logging.ClearProviders();
                  logging.AddLogMagic();
               })
               .Build();

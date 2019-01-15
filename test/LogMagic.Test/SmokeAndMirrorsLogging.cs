@@ -88,12 +88,12 @@ namespace LogMagic.Test
 
          //L.Config.FilterBy.
 
-         log.Write("hello!");
-         log.Write("exception is here!", new Exception("test exception"));
+         log.Info("hello!");
+         log.Error("exception is here!", new Exception("test exception"));
 
          for(int i = 0; i < 100; i++)
          {
-            log.Write("test {i}", i);
+            log.Info("test {i}", i);
          }
       }
    }

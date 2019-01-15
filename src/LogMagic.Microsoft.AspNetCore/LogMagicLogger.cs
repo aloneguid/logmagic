@@ -32,12 +32,19 @@ namespace LogMagic.Microsoft.AspNetCore
 
       public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
       {
+
+         var statePairs = state as IEnumerable<KeyValuePair<string, object>>;
+         if (statePairs == null) return;
+
+         var stateDictionary = new Dictionary<string, object>();
+         foreach(KeyValuePair<string, object> pair in statePairs)
+         {
+            stateDictionary[pair.Key] = pair.Value;
+         }
+
          string message = formatter(state, exception);
 
-         var stateValues = state as IEnumerable<KeyValuePair<string, object>>;
-         if (stateValues == null) return;
-
-         _log.Write(message, ToLogSeverity(logLevel), stateValues);
+         _log.Write(ToLogSeverity(logLevel), message, statePairs);
       }
 
       private LogSeverity ToLogSeverity(LogLevel logLevel)

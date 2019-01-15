@@ -28,11 +28,28 @@ namespace LogMagic
       /// 
       /// </summary>
       /// <param name="log"></param>
+      /// <param name="severity"></param>
       /// <param name="message"></param>
       /// <param name="parameters"></param>
-      public static void Write(this ILog log, string message, params object[] parameters)
+      public static void Write(this ILog log, LogSeverity severity, string message, params object[] parameters)
       {
-         log.Write(message, ToDictionary(true, parameters));
+         log.Write(severity, message, ToDictionary(true, parameters));
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public static void Info(this ILog log, string message, IDictionary<string, object> properties = null)
+      {
+         log.Write(LogSeverity.Information, message, properties);
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public static void Info(this ILog log, string message, params object[] parameters)
+      {
+         log.Info(message, ToDictionary(true, parameters));
       }
 
       /// <summary>
@@ -47,7 +64,7 @@ namespace LogMagic
          IDictionary<string, object> ps = ToDictionary(false, parameters);
          ps[KnownProperty.Error] = error;
 
-         log.Write(message, LogSeverity.Error, ps);
+         log.Write(LogSeverity.Error, message, ps);
       }
 
       /// <summary>
@@ -58,7 +75,7 @@ namespace LogMagic
          IDictionary<string, object> ps = ToDictionary(false, parameters);
          ps[KnownProperty.EventName] = name;
 
-         log.Write(null, ps);
+         log.Write(LogSeverity.Information, null, ps);
       }
 
       /// <summary>
@@ -66,7 +83,9 @@ namespace LogMagic
       /// </summary>
       public static void Metric(this ILog log, string name, double value)
       {
-         log.Write(null,
+         log.Write(
+            LogSeverity.Information,
+            null,
             KnownProperty.MetricName, name,
             KnownProperty.MetricValue, value);
       }
@@ -84,7 +103,7 @@ namespace LogMagic
             KnownProperty.ApplicationParentActivityId, log.GetContextValue(KnownProperty.ApplicationActivityId),
             KnownProperty.ApplicationActivityId, Guid.NewGuid().ToShortest());
 
-         log.Write(null,
+         log.Write(LogSeverity.Information, null,
             KnownProperty.RequestName, requestName);
 
          return context;
@@ -103,7 +122,7 @@ namespace LogMagic
             KnownProperty.ApplicationParentActivityId, log.GetContextValue(KnownProperty.ApplicationActivityId),
             KnownProperty.ApplicationActivityId, Guid.NewGuid().ToShortest());
 
-         log.Write(null, 
+         log.Write(LogSeverity.Information, null, 
             KnownProperty.DependencyType, targetType,
             KnownProperty.DependencyName, commandTemplate,
             KnownProperty.DependencyData, fullCommand);

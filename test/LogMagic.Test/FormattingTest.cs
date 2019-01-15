@@ -26,7 +26,7 @@ namespace LogMagic.Test
       [Fact]
       public void String_NoTransform_Formats()
       {
-         _log.Write("the string");
+         _log.Info("the string");
 
          Assert.Equal("the string", Message);
       }
@@ -34,7 +34,7 @@ namespace LogMagic.Test
       [Fact]
       public void SourceName_Reflected_ThisClass()
       {
-         _log.Write("testing source");
+         _log.Info("testing source");
 
          Assert.Equal("LogMagic.Test.FormattingTest", Event.SourceName);
       }

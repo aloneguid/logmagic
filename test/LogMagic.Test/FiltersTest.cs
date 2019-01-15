@@ -20,7 +20,7 @@ namespace LogMagic.Test
             .FilterBy.MinLogSeverity(LogSeverity.Verbose);
 
 
-         log.Write(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents));
+         log.Info(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents));
 
          Assert.Equal(nameof(SeverityFilter_WithMinSeverity_LogsAllEvents), _writer.Event.Message);
       }
@@ -32,7 +32,7 @@ namespace LogMagic.Test
             .AddWriter(_writer)
             .FilterBy.MinLogSeverity(LogSeverity.Information);
 
-         log.Write(nameof(SeverityFilter_WithInfoSeverity_DoesntLog));
+         log.Info(nameof(SeverityFilter_WithInfoSeverity_DoesntLog));
 
          Assert.Null(_writer.Event);
       }

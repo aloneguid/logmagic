@@ -43,9 +43,9 @@ namespace LogMagic.Console
             using (log.TrackIncomingRequest("launch"))
             {
                //basic logging
-               log.Write("simple write");
+               log.Write(LogSeverity.Information, "simple write");
 
-               log.Write("dividing with parameters",
+               log.Write(LogSeverity.Information, "dividing with parameters",
                   "a", 5,
                   "b", 7);
 
@@ -53,7 +53,7 @@ namespace LogMagic.Console
 
                using (log.Context("one", "two"))
                {
-                  log.Write("properties in context");
+                  log.Write(LogSeverity.Information, "properties in context");
                }
 
                log.Event("custom event");
@@ -68,7 +68,7 @@ namespace LogMagic.Console
                   {
                      using (log.TrackIncomingRequest("getTweets"))
                      {
-                        log.Write("i've got those tweets!");
+                        log.Write(LogSeverity.Information, "i've got those tweets!");
                      }
                   }
                }

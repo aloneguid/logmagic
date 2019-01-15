@@ -23,7 +23,7 @@ namespace LogMagic
          _factory = new EventFactory();
       }
 
-      public void Write(string message, LogSeverity severity, IDictionary<string, object> properties)
+      public void Write(LogSeverity severity, string message, IDictionary<string, object> properties)
       {
          Serve(message, severity, properties);
       }
