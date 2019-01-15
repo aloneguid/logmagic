@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using LogMagic;
 
 namespace LogMagic.WebApiApp
 {
@@ -20,6 +21,10 @@ namespace LogMagic.WebApiApp
       public static IWebHost BuildWebHost(string[] args) =>
           WebHost.CreateDefaultBuilder(args)
               .UseStartup<Startup>()
+              .ConfigureLogging(logging =>
+              {
+                 logging.AddLogMagic();
+              })
               .Build();
    }
 }
