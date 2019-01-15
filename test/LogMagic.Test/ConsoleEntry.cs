@@ -10,8 +10,8 @@ namespace LogMagicExample
       public static void Main(string[] args)
       {
          L.Config
-            .WriteTo.PoshConsole("{time:H:mm:ss,fff}|{level}|{threadId,4}|{source}|{message}{error}")
-            .WriteTo.Console()
+            .AddPoshConsole("{time:H:mm:ss,fff}|{level}|{threadId,4}|{source}|{message}{error}")
+            .AddConsole()
             .EnrichWith.ThreadId();
 
          new Program().Run();

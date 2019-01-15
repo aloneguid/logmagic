@@ -63,19 +63,19 @@ namespace LogMagic.Test
          switch (receiverName)
          {
             case "files":
-               L.Config.WriteTo.File(Path.Combine(TestDir.FullName, "subdir", "testlog.txt"));
+               L.Config.AddFile(Path.Combine(TestDir.FullName, "subdir", "testlog.txt"));
                break;
             case "console":
-               L.Config.WriteTo.Console();
+               L.Config.AddConsole();
                break;
             case "posh-console":
-               L.Config.WriteTo.PoshConsole();
+               L.Config.AddPoshConsole();
                break;
             case "trace":
-               L.Config.WriteTo.Trace();
+               L.Config.AddTrace();
                break;
             case "azure-appinsights":
-               L.Config.WriteTo.AzureApplicationInsights(settings.AppInsightsKey);
+               L.Config.AddAzureApplicationInsights(settings.AppInsightsKey);
                break;
          }   
       }

@@ -28,10 +28,10 @@ namespace LogMagic.Console
                */
 
          L.Config
-            .WriteTo.Trace()
-            .WriteTo.Console()
-            .WriteTo.PoshConsole()
-            .WriteTo.AzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a", flushOnWrite: true)
+            .AddTrace()
+            .AddConsole()
+            .AddPoshConsole()
+            .AddAzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a", flushOnWrite: true)
             .FilterBy.MinLogSeverity(LogSeverity.Verbose)
             .EnrichWith.Constant(KnownProperty.RoleName, "console app")
             .EnrichWith.Constant(KnownProperty.RoleInstance, Guid.NewGuid().ToString());

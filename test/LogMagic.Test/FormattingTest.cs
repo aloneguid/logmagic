@@ -14,8 +14,8 @@ namespace LogMagic.Test
          _writer = new TestWriter();
          L.Config.Reset();
          L.Config
-            .WriteTo.Trace()
-            .WriteTo.Writer(_writer)
+            .AddTrace()
+            .AddWriter(_writer)
             .EnrichWith.ThreadId()
             .EnrichWith.Constant("node", "test");
       }

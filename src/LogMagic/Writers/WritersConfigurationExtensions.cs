@@ -11,81 +11,81 @@ namespace LogMagic
       /// <summary>
       /// Writes to system console
       /// </summary>
-      public static ILogConfiguration Console(this IWriterConfiguration configuration)
+      public static ILogConfiguration AddConsole(this ILogConfiguration configuration)
       {
-         return configuration.Writer(new ConsoleLogWriter(null));
+         return configuration.AddWriter(new ConsoleLogWriter(null));
       }
 
       /// <summary>
       /// Writes to system console
       /// </summary>
-      public static ILogConfiguration Console(this IWriterConfiguration configuration, string format)
+      public static ILogConfiguration AddConsole(this ILogConfiguration configuration, string format)
       {
-         return configuration.Writer(new ConsoleLogWriter(format));
+         return configuration.AddWriter(new ConsoleLogWriter(format));
       }
 
       /// <summary>
       /// Writes to posh system console i.e. with nice colours
       /// </summary>
-      public static ILogConfiguration PoshConsole(this IWriterConfiguration configuration)
+      public static ILogConfiguration AddPoshConsole(this ILogConfiguration configuration)
       {
-         return configuration.Writer(new PoshConsoleLogWriter(null));
+         return configuration.AddWriter(new PoshConsoleLogWriter(null));
       }
 
       /// <summary>
       /// Writes to posh system console i.e. with nice colours
       /// </summary>
-      public static ILogConfiguration PoshConsole(this IWriterConfiguration configuration, string format)
+      public static ILogConfiguration AddPoshConsole(this ILogConfiguration configuration, string format)
       {
-         return configuration.Writer(new PoshConsoleLogWriter(format));
+         return configuration.AddWriter(new PoshConsoleLogWriter(format));
       }
 
       /// <summary>
       /// Writes to .NET trace
       /// </summary>
-      public static ILogConfiguration Trace(this IWriterConfiguration configuration)
+      public static ILogConfiguration AddTrace(this ILogConfiguration configuration)
       {
-         return configuration.Writer(new TraceLogWriter(null));
+         return configuration.AddWriter(new TraceLogWriter(null));
       }
 
       /// <summary>
       /// Writes to .NET trace
       /// </summary>
-      public static ILogConfiguration Trace(this IWriterConfiguration configuration, string format)
+      public static ILogConfiguration AddTrace(this ILogConfiguration configuration, string format)
       {
-         return configuration.Writer(new TraceLogWriter(format));
+         return configuration.AddWriter(new TraceLogWriter(format));
       }
 
       /// <summary>
       /// Writes to file on disk and rolls it over every day.
       /// </summary>
-      public static ILogConfiguration File(this IWriterConfiguration configuration, string fileName)
+      public static ILogConfiguration AddFile(this ILogConfiguration configuration, string fileName)
       {
-         return configuration.Writer(new FileLogWriter(fileName, null));
+         return configuration.AddWriter(new FileLogWriter(fileName, null));
       }
 
       /// <summary>
       /// Writes to file on disk and rolls it over every day.
       /// </summary>
-      public static ILogConfiguration File(this IWriterConfiguration configuration, string fileName, string format)
+      public static ILogConfiguration AddFile(this ILogConfiguration configuration, string fileName, string format)
       {
-         return configuration.Writer(new FileLogWriter(fileName, format));
+         return configuration.AddWriter(new FileLogWriter(fileName, format));
       }
 
       /// <summary>
       /// Writes events to Seq server (https://getseq.net/)
       /// </summary>
-      public static ILogConfiguration Seq(this IWriterConfiguration configuration, Uri serverAddress)
+      public static ILogConfiguration AddSeq(this ILogConfiguration configuration, Uri serverAddress)
       {
-         return configuration.Writer(new SeqWriter(serverAddress, null));
+         return configuration.AddWriter(new SeqWriter(serverAddress, null));
       }
 
       /// <summary>
       /// Writes events to Seq server (https://getseq.net/)
       /// </summary>
-      public static ILogConfiguration Seq(this IWriterConfiguration configuration, Uri serverAddress, string apiKey)
+      public static ILogConfiguration AddSeq(this ILogConfiguration configuration, Uri serverAddress, string apiKey)
       {
-         return configuration.Writer(new SeqWriter(serverAddress, apiKey));
+         return configuration.AddWriter(new SeqWriter(serverAddress, apiKey));
       }
    }
 }

@@ -16,8 +16,8 @@ namespace LogMagic.Test
          L.Config.Reset();
 
          L.Config
-            .WriteTo.Trace()
-            .WriteTo.Writer(_writer);
+            .AddTrace()
+            .AddWriter(_writer);
 
          _log = L.G<FormattingTest>();
       }

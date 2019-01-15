@@ -18,18 +18,18 @@ namespace LogMagic
       /// <param name="documentId">ID of the document to append to</param>
       /// <param name="format">Optional format string</param>
       /// <returns></returns>
-      public static ILogConfiguration StorageAppendBlob(this IWriterConfiguration configuration,
+      public static ILogConfiguration StorageAppendBlob(this ILogConfiguration configuration,
          IBlobStorage blobStorage,
          string documentId,
          string format = null)
       {
-         return configuration.Writer(new BlobStorageLogWriter(blobStorage, documentId, format));
+         return configuration.AddWriter(new BlobStorageLogWriter(blobStorage, documentId, format));
       }
 
       /// <summary>
       /// Initialises logging to key-value storage
       /// </summary>
-      public static ILogConfiguration StorageKeyValue(this IWriterConfiguration configuration,
+      public static ILogConfiguration StorageKeyValue(this ILogConfiguration configuration,
          IKeyValueStorage tableStorage)
       {
          throw new NotImplementedException();
@@ -40,7 +40,7 @@ namespace LogMagic
       /// </summary>
       /// <param name="configuration"></param>
       /// <returns></returns>
-      public static ILogConfiguration StorageMessagePublisher(this IWriterConfiguration configuration)
+      public static ILogConfiguration StorageMessagePublisher(this ILogConfiguration configuration)
       {
          throw new NotImplementedException();
       }

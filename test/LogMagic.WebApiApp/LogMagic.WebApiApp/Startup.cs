@@ -19,8 +19,8 @@ namespace LogMagic.WebApiApp
          Configuration = configuration;
 
          L.Config
-            .WriteTo.Trace()
-            .WriteTo.AzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a");
+            .AddTrace()
+            .AddAzureApplicationInsights("bd1cb207-a247-4db3-aa01-d512ed7d1f2a");
       }
 
       public IConfiguration Configuration { get; }

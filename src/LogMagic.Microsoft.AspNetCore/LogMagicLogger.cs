@@ -18,8 +18,10 @@ namespace LogMagic.Microsoft.AspNetCore
 
       public IDisposable BeginScope<TState>(TState state)
       {
-         //we don't need scope here because LogMagic has it's own API for scoping.
-         return null;
+         if (state == null) return null;
+         if (!(state is IDictionary<string, object> stateDic)) return null;
+
+         return _log.Context(stateDic);
       }
 
       public bool IsEnabled(LogLevel logLevel)
@@ -32,7 +34,10 @@ namespace LogMagic.Microsoft.AspNetCore
       {
          string message = formatter(state, exception);
 
-         _log.Write(message, new KeyValuePair<string, object>(KnownProperty.Severity, ToLogSeverity(logLevel)));
+         var stateValues = state as IEnumerable<KeyValuePair<string, object>>;
+         if (stateValues == null) return;
+
+         _log.Write(message, ToLogSeverity(logLevel), stateValues);
       }
 
       private LogSeverity ToLogSeverity(LogLevel logLevel)

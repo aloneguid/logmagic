@@ -56,6 +56,11 @@ namespace LogMagic
    public interface ILogConfiguration
    {
       /// <summary>
+      /// Add a custom writer
+      /// </summary>
+      ILogConfiguration AddWriter(ILogWriter writer);
+
+      /// <summary>
       /// Resets configuration by clearing all writers etc.
       /// </summary>
       void Reset();
@@ -74,11 +79,6 @@ namespace LogMagic
       /// Entry point to enrichers configuration
       /// </summary>
       IEnricherConfiguration EnrichWith { get; }
-
-      /// <summary>
-      /// Entry point to writers configuration
-      /// </summary>
-      IWriterConfiguration WriteTo { get; }
 
       /// <summary>
       /// Entry point to filters configuration

@@ -23,9 +23,9 @@ namespace LogMagic
          _factory = new EventFactory();
       }
 
-      public void Write(string message, IDictionary<string, object> properties)
+      public void Write(string message, LogSeverity severity, IDictionary<string, object> properties)
       {
-         Serve(message, properties);
+         Serve(message, severity, properties);
       }
 
 #if !NET45
@@ -58,9 +58,11 @@ namespace LogMagic
 
       internal void Serve(
          string message,
+         LogSeverity severity,
          IDictionary<string, object> properties)
       {
          LogEvent e = _factory.CreateEvent(_name, message, properties);
+         e.Severity = severity;
 
          SubmitNow(e);
       }

@@ -127,10 +127,5 @@ namespace LogMagic
       /// Used by some loggers to report cluster health.
       /// </summary>
       public const string ClusterHealthProperty = "clusterHealth";
-
-      /// <summary>
-      /// Logging severity, for values see <see cref="LogSeverity"/>
-      /// </summary>
-      public const string Severity = "severity";
    }
 }

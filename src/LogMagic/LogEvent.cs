@@ -52,13 +52,7 @@ namespace LogMagic
       /// <summary>
       /// Gets log severity, which defaults to <see cref="LogSeverity.Verbose"/> if not present
       /// </summary>
-      public LogSeverity Severity
-      {
-         get
-         {
-            return GetProperty<LogSeverity>(KnownProperty.Severity, LogSeverity.Verbose);
-         }
-      }
+      public LogSeverity Severity { get; set; }
 
       /// <summary>
       /// Adds a new property to this event

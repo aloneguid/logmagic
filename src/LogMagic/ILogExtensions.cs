@@ -36,7 +36,7 @@ namespace LogMagic
       }
 
       /// <summary>
-      /// Writes a message as an error, by adding <see cref="KnownProperty.Error"/> property and setting <see cref="KnownProperty.Severity"/> to <see cref="LogSeverity.Error"/>
+      /// Writes a message as an error, by adding <see cref="KnownProperty.Error"/> property.
       /// </summary>
       /// <param name="log"></param>
       /// <param name="message"></param>
@@ -46,9 +46,8 @@ namespace LogMagic
       {
          IDictionary<string, object> ps = ToDictionary(false, parameters);
          ps[KnownProperty.Error] = error;
-         ps[KnownProperty.Severity] = LogSeverity.Error;
 
-         log.Write(message, ps);
+         log.Write(message, LogSeverity.Error, ps);
       }
 
       /// <summary>

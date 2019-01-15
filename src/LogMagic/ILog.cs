@@ -12,8 +12,9 @@ namespace LogMagic
       /// Writes a log message
       /// </summary>
       /// <param name="message">Log message</param>
+      /// <param name="severity"></param>
       /// <param name="properties">Optional properties</param>
-      void Write(string message, IDictionary<string, object> properties = null);
+      void Write(string message, LogSeverity severity, IDictionary<string, object> properties = null);
 
 #if !NET45
 

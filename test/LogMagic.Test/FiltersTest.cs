@@ -16,7 +16,7 @@ namespace LogMagic.Test
       public void SeverityFilter_WithMinSeverity_LogsAllEvents()
       {
          L.Config
-            .WriteTo.Writer(_writer)
+            .AddWriter(_writer)
             .FilterBy.MinLogSeverity(LogSeverity.Verbose);
 
 
@@ -29,7 +29,7 @@ namespace LogMagic.Test
       public void SeverityFilter_WithInfoSeverity_DoesntLog()
       {
          L.Config
-            .WriteTo.Writer(_writer)
+            .AddWriter(_writer)
             .FilterBy.MinLogSeverity(LogSeverity.Information);
 
          log.Write(nameof(SeverityFilter_WithInfoSeverity_DoesntLog));

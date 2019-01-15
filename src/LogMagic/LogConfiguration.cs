@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LogMagic
 {
-   class LogConfiguration : ILogConfiguration, IWriterConfiguration, IEnricherConfiguration, IFilterConfiguration, IPerformanceCounterConfiguration
+   class LogConfiguration : ILogConfiguration, IEnricherConfiguration, IFilterConfiguration, IPerformanceCounterConfiguration
    {
       private readonly List<ILogWriter> _writers = new List<ILogWriter>();
       private readonly List<IEnricher> _enrichers = new List<IEnricher>();
@@ -14,21 +14,19 @@ namespace LogMagic
 
       public IEnumerable<IEnricher> Enrichers => _enrichers;
 
-      public IEnumerable<ILogWriter> Writers => _writers;
-
       public IEnumerable<IFilter> Filters => _filters;
+
+      public IEnumerable<ILogWriter> Writers => _writers;
 
       public IReadOnlyCollection<IPerformanceCounter> PerformanceCounters => _perfCounters;
 
-      public ILogConfiguration Writer(ILogWriter writer)
+      public ILogConfiguration AddWriter(ILogWriter writer)
       {
          _writers.Add(writer);
 
          return this;
       }
-
-      public IWriterConfiguration WriteTo => this;
-
+      
       public ILogConfiguration Enricher(IEnricher enricher)
       {
          _enrichers.Add(enricher);

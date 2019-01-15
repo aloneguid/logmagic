@@ -19,9 +19,9 @@ namespace LogMagic
       /// <param name="configuration"></param>
       /// <param name="context"></param>
       /// <returns></returns>
-      public static ILogConfiguration AzureServiceFabricHealthReport(this IWriterConfiguration configuration, ServiceContext context)
+      public static ILogConfiguration AzureServiceFabricHealthReport(this ILogConfiguration configuration, ServiceContext context)
       {
-         return configuration.Writer(new HealthReportWriter(context));
+         return configuration.AddWriter(new HealthReportWriter(context));
       }
 
       /// <summary>
