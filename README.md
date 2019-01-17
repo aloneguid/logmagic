@@ -2,11 +2,29 @@
 
 ![logmagic icon](http://i.isolineltd.com/nuget/logmagic.png)
 
+LogMagic is a field-tested .NET Framework and .NET Core library that helps with logging (including [Structured logging](https://www.thoughtworks.com/radar/techniques/structured-logging)). 
+
+Use it to
+- **Log** diagnostic information like 
+  - Traces
+  - Exceptions 
+- **Enrich** with built-in contextual information like 
+  - Thread Id
+  - Method name
+  - Machine name, etc
+- **Write** to one or more destinations like 
+  - Console 
+  - File on disk
+  - Azure Application Insights
+  - Azure Functions
+  - Azure Service Fabric
+  - Azure Blob Storage, etc
+
+To extend functionality, a healthy set of [Writers and Enrichers](#known-writers-and-enrichers) in the form of NuGet packages are maintained along side the core library. Hence the core library has been designed and architected to be easily extensible.
+
 ## Why LogMagic
 
-Like many other libraries for .NET, LogMagic provides diagnostic logging into files, the console, and *elsewhere*. It's probably the easiest framework to setup, has a clean API, extremely extensible.
-
-LogMagic also supports a relatively new paradigm of *structured logging*.
+It's probably the easiest framework to setup, has a clean API and is extremely extensible.
 
 ## Index
 
@@ -42,15 +60,9 @@ Types are in `LogMagic` namespace
 using LogMagic;
 ```
 
-An `ILog` instance is the one used to log events and can be created in one of three ways by calling to global static `L` class.
+An `ILog` instance is the one used to log events and can be created in one of the following ways by calling to global static `L` class.
 
-Create using current class type name
-
-```csharp
-ILog _log = L.G();
-```
-
-Or by specifying type explicitly
+Create by specifying type explicitly
 
 ```csharp
 ILog _log = L.G<T>;			//using generics
@@ -63,7 +75,7 @@ Or by specifying name explicitly
 ILog _log = L.G("instance name");
 ```
 
-By default LogMagic doesn't write events anywhere and you need to configure it:
+LogMagic needs to be configured with at least one Writer, otherwise it won't write to anywhere:
 
 ```csharp
 L.Config.WriteTo.Console();
@@ -73,7 +85,7 @@ This is typically done once at application startup.
 
 ## Example application
 
-The complete example below shows logging in a simple console application, with events sent to the console as well as to file on disk.
+The complete example below shows logging in a simple console application, with events sent to the console.
 
 1. **Create a new Console Application project**
 2. **Install the core LogMagic package**
@@ -94,7 +106,7 @@ namespace LogMagicExample
 {
    public class Program
    {
-      private readonly ILog _log = L.G();
+      private readonly ILog _log = L.G<Program>();
 
       public static void Main(string[] args)
       {
@@ -120,10 +132,10 @@ namespace LogMagicExample
          }
          catch(Exception ex)
          {
-            _log.Trace("unexpected error", ex);
+            _log.Trace("unexpected error when attempting to divide {a} by {b}", a, b, ex);
          }
 
-         _log.Trace("attempting to divide by zero");
+         _log.Trace("bye, LogMagic!");
       }
 
    }
@@ -132,9 +144,11 @@ namespace LogMagicExample
 
 4. **Run the program**
 
+![Example output](doc/example-program-output.png)
+
 ## Logging Exceptions
 
-LogMagic always check last parameter of `Trace()` arguments whether it's an exception class and eliminates from the argument list.
+LogMagic always checks the last parameter of `Trace()` arguments whether it's an exception class and uses that to include additional exception message. Note that you can have other parameters before the exception which can be used to format the message, as shown in the example application above.
 
 
 ## Configuration Basics
