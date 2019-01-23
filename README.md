@@ -2,6 +2,8 @@
 
 ![logmagic icon](http://i.isolineltd.com/nuget/logmagic.png)
 
+> As a creator of LogMagic I've been watching the progress of [Serilog](https://github.com/serilog) for quite some time and switched to using it personally, therefore this project will not be maintained actively anymore. Contibuting to open-source is a tedious task to do in your own time for no financial benefit, and logging is a really hard problem to solve. Therefore in future my contibution to logging will be only in a form of contributing to the awesome **Serilog** project.
+
 LogMagic is a field-tested .NET Framework and .NET Core library that helps with logging (including [Structured logging](https://www.thoughtworks.com/radar/techniques/structured-logging)). 
 
 Use it to
